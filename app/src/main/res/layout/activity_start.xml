@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="8dp"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/start_text"
+        android:text="Скачайте QR код или укажите ID Номер"
+        android:textColor="@color/app_ligth_blue"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/start_id_et"
+        android:textColor="@color/app_ligth_blue"
+        android:textSize="18sp"
+        android:layout_below="@+id/start_text"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edit_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/start_id_ok"
+        android:text="Ok"
+        android:textColor="@color/app_ligth_blue"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:background="@drawable/button_border_bg"
+        android:layout_below="@+id/start_id_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <FrameLayout
+        android:layout_below="@+id/start_id_ok"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.journeyapps.barcodescanner.CompoundBarcodeView
+            android:id="@+id/barcode_scan_v"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.journeyapps.barcodescanner.CompoundBarcodeView>
+        <View
+            android:layout_marginTop="124dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/app_green"/>
+    </FrameLayout>
+</RelativeLayout>
