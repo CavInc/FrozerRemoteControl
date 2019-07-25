@@ -32,7 +32,8 @@ import static android.content.ContentValues.TAG;
  */
 
 public class ControlFragment extends Fragment implements View.OnClickListener {
-    private static final String POST_PAGE = "/page.php";
+    //private static final String POST_PAGE = "/page.php";
+    private static final String POST_PAGE = "/page";
     private DataManager mDataManager;
     private DeviceModel currentModel;
 
@@ -145,7 +146,8 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateUI() {
-        mTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getControlTemperature()));
+        mTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getTemperature())+" / "+
+                String.valueOf(mDataManager.getDeviceControl().getControlTemperature()));
         mHeaterTimeOn.setText(String.valueOf(mDataManager.getDeviceControl().getHeater_time_on()));
         mHeaterTimeOff.setText(String.valueOf(mDataManager.getDeviceControl().getHeater_time_off()));
     }
@@ -233,12 +235,14 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
                 if (currentModel == null) {
                     continue;
                 }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new RequestData(currentModel.getDeviceID()).execute();
-                    }
-                });
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new RequestData(currentModel.getDeviceID()).execute();
+                        }
+                    });
+                }
                 try {
                     TimeUnit.SECONDS.sleep(20);
                 } catch (InterruptedException e) {

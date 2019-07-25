@@ -26,7 +26,7 @@ public class ParseData {
             System.out.println(x);
             DeviceControlModel control = mDataManager.getDeviceControl();
             try {
-                control.setTemperature(Double.valueOf(dt[0]));
+                control.setTemperature(Double.valueOf(dt[1]));
             } catch (Exception e) {
                 control.setTemperature(0);
             }
@@ -40,7 +40,7 @@ public class ParseData {
             String[] dt = x.split(":");
             DeviceControlModel control = mDataManager.getDeviceControl();
             try {
-                control.setControlTemperature(Double.valueOf(dt[0]));
+                control.setControlTemperature(Double.valueOf(dt[1]));
             } catch (Exception e) {
                 control.setControlTemperature(0);
             }
@@ -53,7 +53,7 @@ public class ParseData {
             String[] dt = x.split(":");
             DeviceControlModel control = mDataManager.getDeviceControl();
             try {
-                control.setHeater_time_on(Integer.valueOf(dt[0]));
+                control.setHeater_time_on(Integer.valueOf(dt[1]));
             } catch (Exception e){
                 control.setHeater_time_on(0);
             }
@@ -66,7 +66,7 @@ public class ParseData {
             String[] dt = x.split(":");
             DeviceControlModel control = mDataManager.getDeviceControl();
             try {
-                control.setHeater_time_off(Integer.valueOf(dt[0]));
+                control.setHeater_time_off(Integer.valueOf(dt[1]));
             } catch (Exception e){
                 control.setHeater_time_off(0);
             }
