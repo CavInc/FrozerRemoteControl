@@ -101,10 +101,22 @@
         </LinearLayout>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/control_send_change"
+        android:layout_below="@id/ll2"
+        android:text="Принять изменения"
+        android:background="@drawable/button_border_bg"
+        android:textColor="@color/app_ligth_blue"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/control_over_frozen"
-        android:layout_below="@id/ll2"
+        android:layout_below="@id/control_send_change"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="@color/app_ligth_blue"

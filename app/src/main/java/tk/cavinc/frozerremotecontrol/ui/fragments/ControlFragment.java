@@ -70,6 +70,12 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.control_hoff_up).setOnClickListener(this);
         rootView.findViewById(R.id.control_hoff_down).setOnClickListener(this);
 
+        rootView.findViewById(R.id.control_over_frozen).setOnClickListener(this); // быстрая разморозка
+        rootView.findViewById(R.id.controls_speed_frozen).setOnClickListener(this); // быстрая заморозка
+        rootView.findViewById(R.id.control_reset).setOnClickListener(this);
+
+        rootView.findViewById(R.id.control_send_change).setOnClickListener(this);
+
         return rootView;
     }
 
@@ -87,12 +93,18 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onPause() {
+        if (refreshParam.isAlive()) {
+
+        }
         refreshParam.interrupt();
         super.onPause();
     }
 
     @Override
     public void onDetach() {
+        if (refreshParam.isAlive()) {
+
+        }
         refreshParam.interrupt();
         super.onDetach();
     }
@@ -117,13 +129,55 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         if (view.getId() == R.id.control_hoff_down) {
             changeHeaterTimeOff(-1);
         }
+        if (view.getId() == R.id.control_over_frozen) {
+            setOverFrozen();
+        }
+        if (view.getId() == R.id.controls_speed_frozen) {
+            setSpeedFrozen();
+        }
+        if (view.getId() == R.id.control_send_change) {
+            sendDataControl();
+            updateUI();
+        }
+        if (view.getId() == R.id.control_reset) {
+            resetData();
+        }
+    }
+
+    private void resetData() {
+        DeviceControlModel controlModel = mDataManager.getDeviceControl();
+        controlModel.setHeater_time_off(0);
+        controlModel.setHeater_time_on(0);
+        controlModel.setControlTemperature(0);
+        mDataManager.setDeviceControl(controlModel);
+        updateUI();
+    }
+
+    private void setSpeedFrozen() {
+        DeviceControlModel controlModel = mDataManager.getDeviceControl();
+        controlModel.setControlTemperature(-40);
+        controlModel.setHeater_time_off(0);
+        controlModel.setHeater_time_on(0);
+        mDataManager.setDeviceControl(controlModel);
+        sendDataControl();
+        updateUI();
+    }
+
+    private void setOverFrozen() {
+        DeviceControlModel controlModel = mDataManager.getDeviceControl();
+        controlModel.setControlTemperature(+60);
+        controlModel.setHeater_time_on(0);
+        controlModel.setHeater_time_off(0);
+        mDataManager.setDeviceControl(controlModel);
+        sendDataControl();
+        updateUI();
     }
 
     private void changeHeaterTimeOff(int direct) {
         DeviceControlModel controlModel = mDataManager.getDeviceControl();
         controlModel.setHeater_time_off(controlModel.getHeater_time_off() + direct);
         mDataManager.setDeviceControl(controlModel);
-        sendDataControl();
+        //sendDataControl();
         updateUI();
     }
 
@@ -132,7 +186,7 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         DeviceControlModel controlModel = mDataManager.getDeviceControl();
         controlModel.setHeater_time_on(controlModel.getHeater_time_on() + direct);
         mDataManager.setDeviceControl(controlModel);
-        sendDataControl();
+        //sendDataControl();
         updateUI();
     }
 
@@ -141,15 +195,17 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         DeviceControlModel control = mDataManager.getDeviceControl();
         control.setControlTemperature(control.getControlTemperature() + direct);
         mDataManager.setDeviceControl(control);
-        sendDataControl();
+        //sendDataControl();
         updateUI();
     }
 
     private void updateUI() {
         mTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getTemperature())+" / "+
                 String.valueOf(mDataManager.getDeviceControl().getControlTemperature()));
-        mHeaterTimeOn.setText(String.valueOf(mDataManager.getDeviceControl().getHeater_time_on()));
-        mHeaterTimeOff.setText(String.valueOf(mDataManager.getDeviceControl().getHeater_time_off()));
+        mHeaterTimeOn.setText(String.valueOf(mDataManager.getDeviceControl().getRemote_heater_time_on())+" / "+
+                String.valueOf(mDataManager.getDeviceControl().getHeater_time_on()));
+        mHeaterTimeOff.setText(mDataManager.getDeviceControl().getRemote_heater_time_off()+" / "+
+                String.valueOf(mDataManager.getDeviceControl().getHeater_time_off()));
     }
 
     // оправляем данные на форму

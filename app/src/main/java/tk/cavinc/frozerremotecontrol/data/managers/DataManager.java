@@ -34,7 +34,7 @@ public class DataManager {
 
     public DataManager(){
         mContext = App.getsContext();
-        mDeviceControl = new DeviceControlModel(0,0);
+        mDeviceControl = new DeviceControlModel(0,0,0,0);
     }
 
     // возвращает путь к локальной папки приложения
