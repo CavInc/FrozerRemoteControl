@@ -64,8 +64,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 viewFragment(new DeviceListFragment(),"DEVICELIST");
                 break;
             case R.id.save:
-                if (mDataManager.getCurrentDevice().getId() == -1) {
-                    viewFragment(new SaveFragment(), "SAVEDEVICE");
+                if (mDataManager.getCurrentDevice() != null) {
+                    if (mDataManager.getCurrentDevice().getId() == -1) {
+                        viewFragment(new SaveFragment(), "SAVEDEVICE");
+                    }
                 }
                 break;
             case R.id.home:
