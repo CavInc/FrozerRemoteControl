@@ -40,9 +40,11 @@ public class ParseData {
             String[] dt = x.split(":");
             DeviceControlModel control = mDataManager.getDeviceControl();
             try {
-                control.setControlTemperature(Double.valueOf(dt[1]));
+                //control.setControlTemperature(Double.valueOf(dt[1]));
+                control.setRemoteControlTemperature(Double.valueOf(dt[1]));
             } catch (Exception e) {
-                control.setControlTemperature(0);
+                //control.setControlTemperature(0);
+                control.setRemoteControlTemperature(0);
             }
             mDataManager.setDeviceControl(control);
         }

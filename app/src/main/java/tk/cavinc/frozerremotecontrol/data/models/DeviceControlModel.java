@@ -7,6 +7,7 @@ package tk.cavinc.frozerremotecontrol.data.models;
 public class DeviceControlModel {
     private double temperature;
     private double controlTemperature;
+    private double remoteControlTemperature;
     private int heater_time_on;
     private int heater_time_off;
     private int remote_heater_time_on;
@@ -17,18 +18,18 @@ public class DeviceControlModel {
         this.controlTemperature = controlTemperature;
     }
 
-    /*
-    public DeviceControlModel(double temperature, double controlTemperature, int heater_time_on, int heater_time_off) {
+
+    public DeviceControlModel(double temperature, double controlTemperature, int heater_time_on, int heater_time_off,int off) {
         this.temperature = temperature;
         this.controlTemperature = controlTemperature;
         this.heater_time_on = heater_time_on;
         this.heater_time_off = heater_time_off;
     }
-    */
+
 
     public DeviceControlModel(double temperature, double controlTemperature, int remote_heater_time_on, int remote_heater_time_off) {
         this.temperature = temperature;
-        this.controlTemperature = controlTemperature;
+        this.remoteControlTemperature = controlTemperature;
         this.remote_heater_time_on = remote_heater_time_on;
         this.remote_heater_time_off = remote_heater_time_off;
     }
@@ -79,5 +80,13 @@ public class DeviceControlModel {
 
     public void setRemote_heater_time_off(int remote_heater_time_off) {
         this.remote_heater_time_off = remote_heater_time_off;
+    }
+
+    public double getRemoteControlTemperature() {
+        return remoteControlTemperature;
+    }
+
+    public void setRemoteControlTemperature(double remoteControlTemperature) {
+        this.remoteControlTemperature = remoteControlTemperature;
     }
 }

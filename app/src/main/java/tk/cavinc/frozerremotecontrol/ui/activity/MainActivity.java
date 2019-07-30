@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
+import tk.cavinc.frozerremotecontrol.data.models.DeviceControlModel;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.ui.fragments.DeviceListFragment;
 import tk.cavinc.frozerremotecontrol.ui.fragments.SaveFragment;
@@ -68,10 +69,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.home:
+                mDataManager.setDeviceControl(new DeviceControlModel(0,0,0,0,0));
                 viewFragment(new StartFragment(),"START");
                 break;
         }
     }
+
 
     @Override
     protected void onResume() {

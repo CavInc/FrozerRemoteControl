@@ -178,7 +178,7 @@ public class DataManager {
                         int cTemp = ct.getInt("controlTemperature");
                         int ho = ct.getInt("hto");
                         int hoff = ct.getInt("htoff");
-                        DeviceControlModel controlModel = new DeviceControlModel(0,cTemp,ho,hoff);
+                        DeviceControlModel controlModel = new DeviceControlModel(0,cTemp,ho,hoff,0);
                         recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName"),controlModel));
                     } else {
                         recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName")));

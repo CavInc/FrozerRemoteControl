@@ -1,5 +1,6 @@
 package tk.cavinc.frozerremotecontrol.ui.fragments;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +86,11 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
 
+        currentModel = mDataManager.getCurrentDevice();
+        if (currentModel.getDeviceName() != null) {
+            setSubTitle(currentModel.getDeviceName());
+        }
+
         if (!refreshParam.isAlive()) {
             runFlag = true;
             refreshParam.start();
@@ -91,6 +98,13 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
 
        // currentModel = mDataManager.getCurrentDevice();
        // new RequestData(currentModel.getDeviceID()).execute();
+    }
+
+    private void setSubTitle(String title) {
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setSubtitle(currentModel.getDeviceName());
+        }
     }
 
     @Override
@@ -110,6 +124,7 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
             runFlag = false;
         }
         refreshParam.interrupt();
+        setSubTitle("");
         super.onDetach();
     }
 
