@@ -10,7 +10,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -23,6 +26,7 @@ import tk.cavinc.frozerremotecontrol.ui.fragments.StartFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private static final int REQUEST_CAMERA_CODE = 543;
+    private static final int REQUEST_STORAGE = 545;
     private DataManager mDataManager;
 
     @Override
@@ -79,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             builder.show();
         }
         checkPermissions();
+
+        mDataManager.loadDevice();
     }
 
     private void checkPermissions(){
@@ -86,10 +92,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_CODE);
         }
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_STORAGE);
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CAMERA_CODE:
+                break;
+            case REQUEST_STORAGE:
+                System.out.println(grantResults);
+                break;
+        }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            mDataManager.storeDevice();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -67,6 +67,9 @@ public class DeviceListFragment extends Fragment {
         public void onClick(DeviceModel record, int position) {
             // открываем пульт управления
             mDataManager.setCurrentDevice(record);
+            if (record.getControl() != null) {
+                mDataManager.setDeviceControl(record.getControl());
+            }
             ((MainActivity) getActivity()).viewFragment(new ControlFragment(),"CONTROL");
         }
 

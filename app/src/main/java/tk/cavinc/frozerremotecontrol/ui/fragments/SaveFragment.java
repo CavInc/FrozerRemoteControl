@@ -52,9 +52,11 @@ public class SaveFragment extends Fragment {
             int lastID = mDataManager.getDeviceModels().size();
             model.setId(lastID+1);
             model.setDeviceName(mDeviceName.getText().toString());
+            model.setControl(mDataManager.getDeviceControl());
             mDataManager.addNewDeviceModel(model);
         } else {
             model.setDeviceName(mDeviceName.getText().toString());
+            model.setControl(mDataManager.getDeviceControl());
             mDataManager.updateDeviceModels(model.getId(),model);
         }
     }

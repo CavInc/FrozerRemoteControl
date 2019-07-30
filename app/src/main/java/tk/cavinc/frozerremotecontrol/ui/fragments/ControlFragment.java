@@ -94,7 +94,8 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onPause() {
         if (refreshParam.isAlive()) {
-
+           // refreshParam.stop();
+            runFlag = false;
         }
         refreshParam.interrupt();
         super.onPause();
@@ -103,7 +104,8 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDetach() {
         if (refreshParam.isAlive()) {
-
+            //refreshParam.stop();
+            runFlag = false;
         }
         refreshParam.interrupt();
         super.onDetach();
@@ -280,11 +282,13 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private boolean runFlag = true;
+
     Thread refreshParam = new Thread(new Runnable() {
         @Override
         public void run() {
             System.out.println("Старт");
-            while (true) {
+            while (runFlag) {
                 System.out.println("Hello, World!");
                 Log.d(TAG, "GET DATA REQUEST");
                 currentModel = mDataManager.getCurrentDevice();
