@@ -55,4 +55,23 @@ public class DeviceModel {
     public void setControl(DeviceControlModel control) {
         mControl = control;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj == null)
+            return false;
+        if(!(getClass() == obj.getClass())) {
+            return false;
+        } else {
+            DeviceModel tmp = (DeviceModel) obj;
+            if (tmp.getId() == mId) {
+                return true;
+            } else if (tmp.getDeviceName().equals(mDeviceName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

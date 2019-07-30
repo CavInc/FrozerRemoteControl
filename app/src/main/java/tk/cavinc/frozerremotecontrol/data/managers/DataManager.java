@@ -173,6 +173,9 @@ public class DataManager {
                 for (int i=0;i<items.length();i++){
                     JSONObject lx = (JSONObject) items.get(i);
                     System.out.println(lx);
+                    if (lx.has("deviceControl")) {
+
+                    }
                     recModel.add(new DeviceModel(lx.getInt("id"),lx.getString("deviceID"),lx.getString("deviceName")));
                 }
                 if (recModel.size() != 0 ){

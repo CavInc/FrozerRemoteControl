@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import tk.cavinc.frozerremotecontrol.R;
@@ -84,6 +85,7 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         super.onResume();
 
         if (!refreshParam.isAlive()) {
+            runFlag = true;
             refreshParam.start();
         }
 
@@ -282,6 +284,25 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG,"DESTROY CONTROL");
+
+        DeviceModel model = mDataManager.getCurrentDevice();
+        int pos = mDataManager.getDeviceModels().indexOf(model.getId());
+        model.setControl(mDataManager.getDeviceControl());
+        if (pos != -1) {
+             mDataManager.updateDeviceModels(pos,model);
+        }
+
+        super.onDestroy();
+    }
+
     private boolean runFlag = true;
 
     Thread refreshParam = new Thread(new Runnable() {
@@ -294,6 +315,9 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
                 currentModel = mDataManager.getCurrentDevice();
                 if (currentModel == null) {
                     continue;
+                }
+                if (currentModel.getControl() != null ) {
+                    mDataManager.setDeviceControl(currentModel.getControl());
                 }
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
