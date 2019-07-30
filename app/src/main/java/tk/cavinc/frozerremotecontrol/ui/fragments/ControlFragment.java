@@ -294,7 +294,7 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         Log.d(TAG,"DESTROY CONTROL");
 
         DeviceModel model = mDataManager.getCurrentDevice();
-        int pos = mDataManager.getDeviceModels().indexOf(model.getId());
+        int pos = mDataManager.getDeviceModels().indexOf(model);
         model.setControl(mDataManager.getDeviceControl());
         if (pos != -1) {
              mDataManager.updateDeviceModels(pos,model);

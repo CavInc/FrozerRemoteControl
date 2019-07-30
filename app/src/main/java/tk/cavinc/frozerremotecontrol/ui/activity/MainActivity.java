@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //rec.add(new DeviceModel(2,"YYYYY","Основонй"));
         mDataManager.setDeviceModels(rec);
 
+        mDataManager.loadDevice();
 
         viewFragment(new StartFragment(),"START");
     }
@@ -83,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             builder.show();
         }
         checkPermissions();
-
-        mDataManager.loadDevice();
     }
 
     private void checkPermissions(){
