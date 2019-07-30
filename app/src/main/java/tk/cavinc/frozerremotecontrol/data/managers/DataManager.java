@@ -174,9 +174,15 @@ public class DataManager {
                     JSONObject lx = (JSONObject) items.get(i);
                     System.out.println(lx);
                     if (lx.has("deviceControl")) {
-
+                        JSONObject ct = (JSONObject) lx.get("deviceControl");
+                        int cTemp = ct.getInt("controlTemperature");
+                        int ho = ct.getInt("hto");
+                        int hoff = ct.getInt("htoff");
+                        DeviceControlModel controlModel = new DeviceControlModel(0,cTemp,ho,hoff);
+                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName"),controlModel));
+                    } else {
+                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName")));
                     }
-                    recModel.add(new DeviceModel(lx.getInt("id"),lx.getString("deviceID"),lx.getString("deviceName")));
                 }
                 if (recModel.size() != 0 ){
                     this.setDeviceModels(recModel);
