@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 
 import org.json.JSONException;
 
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_STORAGE = 545;
     private DataManager mDataManager;
 
+    private ImageButton mSaveIBT;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDataManager = DataManager.getInstance();
 
         findViewById(R.id.list).setOnClickListener(this);
-        findViewById(R.id.save).setOnClickListener(this);
+        mSaveIBT =  findViewById(R.id.save);
+        mSaveIBT.setOnClickListener(this);
         findViewById(R.id.home).setOnClickListener(this);
 
         ArrayList<DeviceModel> rec = new ArrayList<>();
@@ -59,8 +63,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        mSaveIBT.setEnabled(true);
         switch (view.getId()) {
             case R.id.list:
+                mSaveIBT.setEnabled(false);
                 viewFragment(new DeviceListFragment(),"DEVICELIST");
                 break;
             case R.id.save:
