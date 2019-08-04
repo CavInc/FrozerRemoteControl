@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
 import tk.cavinc.frozerremotecontrol.ui.adapters.DevicesListAdapter;
 import tk.cavinc.frozerremotecontrol.ui.helper.DeviceItemsListener;
+import tk.cavinc.frozerremotecontrol.ui.helper.SimpleItemTouchHelperCallback;
+import tk.cavinc.frozerremotecontrol.utils.SwipeDetector;
 
 /**
  * Created by cav on 15.07.19.
@@ -28,6 +31,10 @@ public class DeviceListFragment extends Fragment {
 
     private RecyclerView mListView;
     private DevicesListAdapter mAdapter;
+
+    private SwipeDetector swipeDetector;
+    private ItemTouchHelper mItemTouchHelper;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +50,9 @@ public class DeviceListFragment extends Fragment {
         mListView = rootView.findViewById(R.id.device_lv);
         mListView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        //swipeDetector = new SwipeDetector();
+        //mListView.setOnTouchListener(swipeDetector);
+
         return rootView;
     }
 
@@ -57,6 +67,11 @@ public class DeviceListFragment extends Fragment {
         if (mAdapter == null){
             mAdapter = new DevicesListAdapter(data,mDeviceItemsListener);
             mListView.setAdapter(mAdapter);
+
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+
+            mItemTouchHelper = new ItemTouchHelper(callback);
+            mItemTouchHelper.attachToRecyclerView(mListView);
         } else {
             mAdapter.notifyDataSetChanged();
         }

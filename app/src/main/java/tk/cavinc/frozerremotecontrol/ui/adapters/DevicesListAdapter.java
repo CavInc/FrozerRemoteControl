@@ -1,5 +1,6 @@
 package tk.cavinc.frozerremotecontrol.ui.adapters;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,17 +10,21 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Collections;
 import java.util.List;
 
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.ui.helper.DeviceItemsListener;
+import tk.cavinc.frozerremotecontrol.ui.helper.ItemTouchHelperAdapter;
+import tk.cavinc.frozerremotecontrol.ui.helper.ItemTouchHelperViewHolder;
+import tk.cavinc.frozerremotecontrol.utils.App;
 
 /**
  * Created by cav on 16.07.19.
  */
 
-public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.ViewHolder> {
+public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.ViewHolder> implements ItemTouchHelperAdapter {
     private List<DeviceModel> data;
 
     private DeviceItemsListener mDeviceItemsListener;
@@ -51,7 +56,20 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
         return data.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(data, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        data.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener,ItemTouchHelperViewHolder {
         private TextView mDeviceName;
 
         DeviceItemsListener mItemsListener;
@@ -77,6 +95,16 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                 mItemsListener.onClick(data.get(getAdapterPosition()),getAdapterPosition());
             }
             return true;
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(App.getContext().getResources().getColor(R.color.app_indigo_dark));
         }
     }
 }

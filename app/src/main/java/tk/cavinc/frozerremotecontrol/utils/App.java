@@ -13,6 +13,10 @@ public class App extends Application{
     private static Context sContext;
     private static SharedPreferences sSharedPreferences;
 
+    public static Context getContext() {
+        return sContext;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
