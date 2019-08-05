@@ -56,7 +56,7 @@ public class ParseData {
             DeviceControlModel control = mDataManager.getDeviceControl();
             try {
                 //control.setHeater_time_on(Integer.valueOf(dt[1]));
-                control.setRemote_heater_time_on(Integer.valueOf(dt[1]));
+                control.setRemote_heater_time_on(Integer.valueOf(dt[1].trim()));
             } catch (Exception e){
                 //control.setHeater_time_on(0);
                 control.setRemote_heater_time_on(0);
@@ -71,7 +71,7 @@ public class ParseData {
             DeviceControlModel control = mDataManager.getDeviceControl();
             try {
                 //control.setHeater_time_off(Integer.valueOf(dt[1]));
-                control.setRemote_heater_time_off(Integer.valueOf(dt[1]));
+                control.setRemote_heater_time_off(Integer.valueOf(dt[1].trim()));
             } catch (Exception e){
                 //control.setHeater_time_off(0);
                 control.setRemote_heater_time_off(0);
