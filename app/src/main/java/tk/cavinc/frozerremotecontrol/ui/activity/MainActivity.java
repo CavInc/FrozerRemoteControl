@@ -70,9 +70,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 viewFragment(new DeviceListFragment(),"DEVICELIST");
                 break;
             case R.id.save:
-                if (mDataManager.getCurrentDevice() != null) {
-                    if (mDataManager.getCurrentDevice().getId() == -1) {
-                        viewFragment(new SaveFragment(), "SAVEDEVICE");
+                DeviceModel model = mDataManager.getCurrentDevice();
+                if (model != null) {
+                    if (model.getId() == -1) {
+                        ArrayList<DeviceModel> devices = mDataManager.getDeviceModels();
+                        int deviceID =  devices.indexOf(new DeviceModel(-1,model.getDeviceID(),model.getDeviceName()));
+                        if (deviceID == -1) {
+                            viewFragment(new SaveFragment(), "SAVEDEVICE");
+                        } else {
+                            // говрим что с тамки id уже есть запись
+                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                            builder.setTitle("Внимание")
+                                    .setMessage("Уже есть запись с таким ID :"+
+                                            model.getDeviceID()+", сохранено под имененем :"+devices.get(deviceID).getDeviceName())
+                                    .setNegativeButton(R.string.dialog_close,null);
+                            builder.show();
+                        }
                     }
                 }
                 break;

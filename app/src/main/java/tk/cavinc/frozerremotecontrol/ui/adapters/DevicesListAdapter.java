@@ -49,6 +49,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DeviceModel record = data.get(position);
         holder.mDeviceName.setText(record.getId()+". "+record.getDeviceName());
+        holder.mDeviceId.setText(record.getDeviceID());
     }
 
     @Override
@@ -71,12 +72,14 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener,ItemTouchHelperViewHolder {
         private TextView mDeviceName;
+        private TextView mDeviceId;
 
         DeviceItemsListener mItemsListener;
 
         public ViewHolder(View itemView,DeviceItemsListener listener) {
             super(itemView);
             mDeviceName = itemView.findViewById(R.id.device_item_name);
+            mDeviceId = itemView.findViewById(R.id.device_item_id);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
             mItemsListener = listener;

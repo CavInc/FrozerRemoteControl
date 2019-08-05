@@ -70,6 +70,8 @@ public class DeviceModel {
                 return true;
             } else if (tmp.getDeviceName().equals(mDeviceName)) {
                 return true;
+            } else if (tmp.getDeviceID().equals(mDeviceID)) {
+                return true;
             }
         }
         return false;

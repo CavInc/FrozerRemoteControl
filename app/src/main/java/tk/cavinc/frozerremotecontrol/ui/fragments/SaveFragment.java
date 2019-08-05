@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
@@ -48,6 +50,7 @@ public class SaveFragment extends Fragment {
         super.onDetach();
         Log.d(TAG,"DETACH");
         DeviceModel model = mDataManager.getCurrentDevice();
+
         if (model.getId() == -1) {
             int lastID = mDataManager.getDeviceModels().size();
             model.setId(lastID+1);

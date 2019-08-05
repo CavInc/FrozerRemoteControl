@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:paddingBottom="16dp"
     android:paddingTop="16dp"
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/device_item_name"
         android:textSize="20sp"
+        tools:text="Имя"
+        android:textColor="@color/app_ligth_blue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/device_item_id"
+        tools:text="deviceid"
+        android:textSize="16sp"
+        android:paddingLeft="16dp"
         android:textColor="@color/app_ligth_blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
