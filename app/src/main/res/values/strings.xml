@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">FrozerRemoteControl</string>
     <string name="dialog_close">Закрыть</string>
+    <string name="dialog_yes">Да</string>
+    <string name="dialog_no">Нет</string>
 </resources>

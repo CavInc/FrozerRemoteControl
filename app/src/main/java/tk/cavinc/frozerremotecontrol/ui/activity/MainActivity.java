@@ -1,7 +1,10 @@
 package tk.cavinc.frozerremotecontrol.ui.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -45,11 +48,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.home).setOnClickListener(this);
 
         ArrayList<DeviceModel> rec = new ArrayList<>();
-        //rec.add(new DeviceModel(1,"XXXX","Рыба"));
-        //rec.add(new DeviceModel(2,"YYYYY","Основонй"));
         mDataManager.setDeviceModels(rec);
 
         mDataManager.loadDevice();
+
+        //startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
 
         viewFragment(new StartFragment(),"START");
     }
@@ -101,11 +104,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         if (!mDataManager.isOnline()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Внимание !!!")
-                    .setMessage("Не включена передача данных ")
-                    .setNegativeButton(R.string.dialog_close,null);
-            builder.show();
+            if (!mDataManager.isWIFIOnline()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Внимание !!!")
+                        .setMessage("Не включена передача данных \n включить WIFI ?")
+                        .setNegativeButton(R.string.dialog_no,null)
+                        .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            }
+                        });
+                builder.show();
+            }
         }
         checkPermissions();
     }

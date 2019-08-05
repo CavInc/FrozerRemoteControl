@@ -2,6 +2,7 @@ package tk.cavinc.frozerremotecontrol.data.managers;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Environment;
 
@@ -65,9 +66,16 @@ public class DataManager {
 
     // проверяем включен ли интернетик
     public boolean isOnline(){
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);;
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    // проверяем включен ли wifi
+    public boolean isWIFIOnline() {
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return mWifi != null && mWifi.isConnected();
     }
 
     public ArrayList<DeviceModel> getDeviceModels() {
