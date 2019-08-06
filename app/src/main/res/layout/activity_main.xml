@@ -40,9 +40,19 @@
 
     <FrameLayout
         android:id="@+id/container"
+        android:layout_above="@+id/version"
         android:layout_below="@+id/buttonPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
-
+    <TextView
+        tools:text="version"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/app_ligth_blue"
+        android:id="@+id/version"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

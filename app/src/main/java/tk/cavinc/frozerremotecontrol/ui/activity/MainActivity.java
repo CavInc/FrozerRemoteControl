@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.json.JSONException;
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDataManager.loadDevice();
 
         //startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+        ((TextView) findViewById(R.id.version)).setText(mDataManager.getVersionSoft());
 
         viewFragment(new StartFragment(),"START");
     }
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        /*
         if (!mDataManager.isOnline()) {
             if (!mDataManager.isWIFIOnline()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -118,6 +121,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 builder.show();
             }
         }
+        */
+
+        if (!mDataManager.isWIFIOnline()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Внимание !!!")
+                    .setMessage("Не включена передача данных \n включить WIFI ?")
+                    .setNegativeButton(R.string.dialog_no,null)
+                    .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                        }
+                    });
+            builder.show();
+        }
+
         checkPermissions();
     }
 

@@ -22,6 +22,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import tk.cavinc.frozerremotecontrol.BuildConfig;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceControlModel;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.utils.App;
@@ -117,6 +118,11 @@ public class DataManager {
 
     public DeviceControlModel getDeviceControl(){
         return mDeviceControl;
+    }
+
+    // версия программы
+    public String getVersionSoft(){
+        return "Версия : "+ BuildConfig.VERSION_NAME;
     }
 
     // сохраняем список данных
