@@ -18,7 +18,7 @@
             android:layout_weight="1"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
-            android:textSize="50sp"
+            android:textSize="42sp"
             android:gravity="center"
             android:textColor="@color/app_ligth_blue"
             android:layout_width="match_parent"

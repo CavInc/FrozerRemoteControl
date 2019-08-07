@@ -219,7 +219,8 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateUI() {
-        mTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getTemperature())+" / "+
+        mTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getTemperature())+" ("+
+                String.valueOf(mDataManager.getDeviceControl().getRemoteControlTemperature())+") / "+
                 String.valueOf(mDataManager.getDeviceControl().getControlTemperature()));
         mHeaterTimeOn.setText(String.valueOf(mDataManager.getDeviceControl().getRemote_heater_time_on())+" / "+
                 String.valueOf(mDataManager.getDeviceControl().getHeater_time_on()));
