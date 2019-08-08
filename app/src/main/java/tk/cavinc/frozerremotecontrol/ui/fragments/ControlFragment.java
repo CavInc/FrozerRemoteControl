@@ -1,6 +1,5 @@
 package tk.cavinc.frozerremotecontrol.ui.fragments;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import tk.cavinc.frozerremotecontrol.R;
@@ -41,6 +39,8 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     private DeviceModel currentModel;
 
     private TextView mTemperature;
+    private TextView mControlTemperature;
+    private TextView mRemControlTemperature;
 
     private TextView mHeaterTimeOn;
     private TextView mHeaterTimeOff;
@@ -59,7 +59,10 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.control_fragment, container, false);
 
-        mTemperature = rootView.findViewById(R.id.control_temperature);
+        mTemperature = rootView.findViewById(R.id.temperature);
+        mControlTemperature = rootView.findViewById(R.id.control_temperature);
+        mRemControlTemperature = rootView.findViewById(R.id.rem_control_temperature);
+
         mTempUp = rootView.findViewById(R.id.control_temp_up);
         mTempDown = rootView.findViewById(R.id.control_temp_down);
         mTempUp.setOnClickListener(this);
@@ -219,9 +222,9 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateUI() {
-        mTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getTemperature())+" ("+
-                String.valueOf(mDataManager.getDeviceControl().getRemoteControlTemperature())+") / "+
-                String.valueOf(mDataManager.getDeviceControl().getControlTemperature()));
+        mTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getTemperature()));
+        mRemControlTemperature.setText("("+String.valueOf(mDataManager.getDeviceControl().getRemoteControlTemperature())+")");
+        mControlTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getControlTemperature()));
         mHeaterTimeOn.setText(String.valueOf(mDataManager.getDeviceControl().getRemote_heater_time_on())+" / "+
                 String.valueOf(mDataManager.getDeviceControl().getHeater_time_on()));
         mHeaterTimeOff.setText(mDataManager.getDeviceControl().getRemote_heater_time_off()+" / "+

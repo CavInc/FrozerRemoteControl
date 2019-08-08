@@ -1,13 +1,19 @@
 package tk.cavinc.frozerremotecontrol.data.network;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceControlModel;
 import tk.cavinc.frozerremotecontrol.data.models.RequestReturnModel;
 
@@ -56,6 +62,7 @@ public class Request {
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 String res = getRequestMessage(conn);
                 System.out.println(res);
+                storeInStorage(res); // TODO отключить после отладки
                 requestRes = new RequestReturnModel(true,res);
             } else {
                 RequestReturnModel res = new RequestReturnModel(false,conn.getResponseMessage());
@@ -67,6 +74,19 @@ public class Request {
             return new RequestReturnModel(false,e.getLocalizedMessage());
         }
         return requestRes;
+    }
+
+    // сохраняем данные
+    private void storeInStorage(String store) throws IOException {
+        DataManager manager = DataManager.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String df = format.format(new Date());
+        String path = manager.getStorageAppPath();
+        File out = new File(path+"/"+"l"+df+".txt");
+        FileWriter writer = new FileWriter(out, true);
+        BufferedWriter bufferWriter = new BufferedWriter(writer);
+        bufferWriter.write(store);
+        bufferWriter.close();
     }
 
     // запрос на устройство

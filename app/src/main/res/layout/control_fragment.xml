@@ -12,9 +12,38 @@
         android:layout_marginBottom="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_weight="1"
+                tools:text="-12.34"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="30sp"
+                android:textColor="@color/app_ligth_blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/rem_control_temperature"
+                android:layout_weight="1"
+                tools:text="(34.00)"
+                android:textStyle="bold"
+                android:textColor="@color/app_ligth_blue"
+                android:layout_marginTop="8dp"
+                android:textSize="22sp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/control_temperature"
-            tools:text="-12"
+            tools:text="-12.00"
             android:layout_weight="1"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
