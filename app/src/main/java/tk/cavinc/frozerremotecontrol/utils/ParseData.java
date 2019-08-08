@@ -18,7 +18,7 @@ public class ParseData {
     }
 
     public void parse(String data){
-        Pattern pattern = Pattern.compile("\\b(temperature:).[\\d\\.]*");
+        Pattern pattern = Pattern.compile("\\b(temperature:).[-\\d\\.]*");
         Matcher matcher = pattern.matcher(data);
         if (matcher.find()){
             String x = data.substring(matcher.start(), matcher.end());
@@ -32,7 +32,7 @@ public class ParseData {
             }
             mDataManager.setDeviceControl(control);
         }
-        pattern = Pattern.compile("\\b(control_temperature:).[\\d\\.]*");
+        pattern = Pattern.compile("\\b(control_temperature:).[-\\d\\.]*");
         matcher = pattern.matcher(data);
         if (matcher.find()) {
             String x = data.substring(matcher.start(), matcher.end());
@@ -48,7 +48,7 @@ public class ParseData {
             }
             mDataManager.setDeviceControl(control);
         }
-        pattern = Pattern.compile("\\b(heater time_on:).[\\d\\.]*");
+        pattern = Pattern.compile("\\b(heater time_on:).[\\s-\\d\\.]*");
         matcher = pattern.matcher(data);
         if (matcher.find()){
             String x = data.substring(matcher.start(), matcher.end());
@@ -63,7 +63,7 @@ public class ParseData {
             }
             mDataManager.setDeviceControl(control);
         }
-        pattern = Pattern.compile("\\b(heater time_off:).[\\d\\.]*");
+        pattern = Pattern.compile("\\b(heater time_off:).[\\s-\\d\\.]*");
         matcher = pattern.matcher(data);
         if (matcher.find()){
             String x = data.substring(matcher.start(), matcher.end());
