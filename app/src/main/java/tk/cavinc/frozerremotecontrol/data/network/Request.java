@@ -62,7 +62,7 @@ public class Request {
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 String res = getRequestMessage(conn);
                 System.out.println(res);
-                storeInStorage(res); // TODO отключить после отладки
+                //storeInStorage(res); // TODO отключить после отладки
                 requestRes = new RequestReturnModel(true,res);
             } else {
                 RequestReturnModel res = new RequestReturnModel(false,conn.getResponseMessage());
