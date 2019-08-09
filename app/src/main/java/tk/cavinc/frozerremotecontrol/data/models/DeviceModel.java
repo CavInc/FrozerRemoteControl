@@ -9,12 +9,28 @@ public class DeviceModel {
     private String mDeviceID; // адрес устройства ?
     private String mDeviceName;
     private DeviceControlModel mControl;
+    private int mGraphId;  // иконка устройства
 
 
     public DeviceModel(int id, String deviceID, String deviceName) {
         mId = id;
         mDeviceID = deviceID;
         mDeviceName = deviceName;
+    }
+
+    public DeviceModel(int id, String deviceID, String deviceName, int graphId) {
+        mId = id;
+        mDeviceID = deviceID;
+        mDeviceName = deviceName;
+        mGraphId = graphId;
+    }
+
+    public DeviceModel(int id, String deviceID, String deviceName, DeviceControlModel control, int graphId) {
+        mId = id;
+        mDeviceID = deviceID;
+        mDeviceName = deviceName;
+        mControl = control;
+        mGraphId = graphId;
     }
 
     public DeviceModel(int id, String deviceID, String deviceName, DeviceControlModel control) {
@@ -54,6 +70,14 @@ public class DeviceModel {
 
     public void setControl(DeviceControlModel control) {
         mControl = control;
+    }
+
+    public int getGraphId() {
+        return mGraphId;
+    }
+
+    public void setGraphId(int graphId) {
+        mGraphId = graphId;
     }
 
     @Override

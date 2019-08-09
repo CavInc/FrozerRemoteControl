@@ -134,6 +134,7 @@ public class DataManager {
             itm.put("id",l.getId());
             itm.put("deviceID",l.getDeviceID());
             itm.put("deviceName",l.getDeviceName());
+            itm.put("icondId",l.getGraphId());
             if (l.getControl() != null) {
                 JSONObject control = new JSONObject();
                 control.put("controlTemperature",l.getControl().getControlTemperature());
@@ -187,15 +188,19 @@ public class DataManager {
                 for (int i=0;i<items.length();i++){
                     JSONObject lx = (JSONObject) items.get(i);
                     System.out.println(lx);
+                    int iconId = -1;
+                    if (lx.has("icondId")) {
+                        iconId = lx.getInt("icondId");
+                    }
                     if (lx.has("deviceControl")) {
                         JSONObject ct = (JSONObject) lx.get("deviceControl");
                         int cTemp = ct.getInt("controlTemperature");
                         int ho = ct.getInt("hto");
                         int hoff = ct.getInt("htoff");
                         DeviceControlModel controlModel = new DeviceControlModel(0,cTemp,ho,hoff,0);
-                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName"),controlModel));
+                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName"),controlModel,iconId));
                     } else {
-                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName")));
+                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName"),iconId));
                     }
                 }
                 if (recModel.size() != 0 ){
