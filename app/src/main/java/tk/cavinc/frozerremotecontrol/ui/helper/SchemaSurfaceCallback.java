@@ -1,9 +1,15 @@
 package tk.cavinc.frozerremotecontrol.ui.helper;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+
+import tk.cavinc.frozerremotecontrol.R;
 
 /**
  * Created by cav on 14.08.19.
@@ -14,11 +20,16 @@ public class SchemaSurfaceCallback implements SurfaceHolder.Callback {
     private DrawTread mDrawTread;
 
     private static final String TAG = "CALL";
+    private Context mContext;
+
+    public SchemaSurfaceCallback(Context context) {
+        mContext = context;
+    }
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         Log.d(TAG,"SURFACE GREATE");
-        mDrawTread = new DrawTread(surfaceHolder);
+        mDrawTread = new DrawTread(surfaceHolder, mContext.getResources());
         mDrawTread.setRunnung(true);
         mDrawTread.run();
     }
@@ -47,8 +58,11 @@ public class SchemaSurfaceCallback implements SurfaceHolder.Callback {
         private boolean runnung = false;
         private SurfaceHolder surfaceHolder;
 
-        public DrawTread(SurfaceHolder holder){
+        private Bitmap picture;
+
+        public DrawTread(SurfaceHolder holder, Resources resources){
             surfaceHolder = holder;
+            picture = BitmapFactory.decodeResource(resources, R.drawable.ic_fr1);
         }
 
         public void setRunnung(boolean runnung) {
@@ -62,8 +76,9 @@ public class SchemaSurfaceCallback implements SurfaceHolder.Callback {
                 canvas = null;
                 try {
                     canvas = surfaceHolder.lockCanvas(null);
-                    if (canvas == null) continue;
-
+                    synchronized (surfaceHolder) {
+                        canvas.drawColor(Color.CYAN);
+                    }
                 } finally {
                     if (canvas != null) {
                         surfaceHolder.unlockCanvasAndPost(canvas);
