@@ -28,7 +28,7 @@ import tk.cavinc.frozerremotecontrol.utils.SwipeDetector;
  * Created by cav on 15.07.19.
  */
 
-public class DeviceListFragment extends Fragment {
+public class DeviceListFragment extends Fragment implements View.OnClickListener{
     private DataManager mDataManager;
 
     private RecyclerView mListView;
@@ -51,6 +51,8 @@ public class DeviceListFragment extends Fragment {
 
         mListView = rootView.findViewById(R.id.device_lv);
         mListView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        rootView.findViewById(R.id.device_list_bt).setOnClickListener(this);
 
         //swipeDetector = new SwipeDetector();
         //mListView.setOnTouchListener(swipeDetector);
@@ -99,4 +101,12 @@ public class DeviceListFragment extends Fragment {
             ((MainActivity) getActivity()).viewFragment(new SaveFragment(),"SAVEDEVICE");
         }
     };
+
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.device_list_bt) {
+            ((MainActivity) getActivity()).viewFragment(new DeviceListSchemeFragment(),"SCHEME");
+        }
+    }
 }
