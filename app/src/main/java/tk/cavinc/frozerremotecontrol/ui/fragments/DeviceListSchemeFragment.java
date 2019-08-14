@@ -35,9 +35,9 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         View rootView = inflater.inflate(R.layout.device_scheme_fragment, container, false);
 
         rootView.findViewById(R.id.device_list_bt).setOnClickListener(this);
-        mSurfaceView = rootView.findViewById(R.id.device_schema_map);
+       // mSurfaceView = rootView.findViewById(R.id.device_schema_map);
 
-        mSurfaceView.getHolder().addCallback(new SchemaSurfaceCallback(getActivity()));
+      //  mSurfaceView.getHolder().addCallback(new SchemaSurfaceCallback(getActivity()));
 
         return rootView;
     }

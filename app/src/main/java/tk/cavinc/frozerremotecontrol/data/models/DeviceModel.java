@@ -10,6 +10,9 @@ public class DeviceModel {
     private String mDeviceName;
     private DeviceControlModel mControl;
     private int mGraphId;  // иконка устройства
+    private int mDirection = 0; // угол поворота
+    private int mX = 0;
+    private int mY = 0;
 
 
     public DeviceModel(int id, String deviceID, String deviceName) {
@@ -78,6 +81,18 @@ public class DeviceModel {
 
     public void setGraphId(int graphId) {
         mGraphId = graphId;
+    }
+
+    public int getDirection() {
+        return mDirection;
+    }
+
+    public int getX() {
+        return mX;
+    }
+
+    public int getY() {
+        return mY;
     }
 
     @Override
