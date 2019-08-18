@@ -17,6 +17,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -46,11 +49,15 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
     private FrameLayout mFrameLayout;
     private int xDelta;
     private int yDelta;
+    private boolean modeEdit = false;
+    private MenuItem editItem;
+    private MenuItem domeItem;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDataManager = DataManager.getInstance();
+        setHasOptionsMenu (true);
     }
 
     @Nullable
@@ -65,6 +72,32 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
        mFrameLayout  = rootView.findViewById(R.id.device_schema_map);
 
         return rootView;
+    }
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.device_shema_menu,menu);
+        editItem = menu.getItem(0);
+        domeItem = menu.getItem(1);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_edit) {
+            modeEdit = true;
+            editItem.setVisible(false);
+            domeItem.setVisible(true);
+        }
+        if (item.getItemId() == R.id.menu_done) {
+            modeEdit = false;
+            editItem.setVisible(true);
+            domeItem.setVisible(false);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -84,9 +117,6 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         ArrayList<DeviceModel> data = mDataManager.getDeviceModels();
 
         for (DeviceModel l : data) {
-            if (l.isVisible()) {
-
-            }
             ImageView imgx = setImageView(l.getX(),l.getY(),l.getDirection(),l.getGraphId(),l.getId());
             mFrameLayout.addView(imgx);
         }
@@ -97,13 +127,6 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         ImageView img = new ImageView(getActivity());
         switch (type) {
             case 1:
-                /*
-                ShapeDrawable fr = new ShapeDrawable(new RectShape());
-                fr.setIntrinsicWidth(5);
-                fr.setIntrinsicHeight(50);
-                fr.getPaint().setColor(Color.argb(100,50,100,250));
-                img.setBackgroundDrawable(fr);
-                */
                 Bitmap bitmap1 = getVectorBitmap(R.drawable.ic_fr1);
                 img.setImageBitmap(bitmap1);
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(50, 50);
@@ -113,13 +136,6 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                 img.setOnTouchListener(this);
                 break;
             case 2:
-                /*
-                ShapeDrawable fr2 = new ShapeDrawable(new RectShape());
-                fr2.getPaint().setColor(Color.argb(100,50,100,250));
-                fr2.setIntrinsicWidth(5);
-                fr2.setIntrinsicHeight(50);
-                img.setBackgroundDrawable(fr2);
-                */
                 Bitmap bitmap2 = getVectorBitmap(R.drawable.ic_fr2);
                 img.setImageBitmap(bitmap2);
                 img.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -140,11 +156,6 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                 img.setOnTouchListener(this);
                 break;
             case 4:
-                /*
-                ShapeDrawable fr4 = new ShapeDrawable(new ArcShape(0,90));
-                fr4.getPaint().setColor(Color.argb(100,50,100,250));
-                img.setBackgroundDrawable(fr4);
-                */
                 Bitmap bitmap4 = getVectorBitmap(R.drawable.ic_fr4);
                 img.setImageBitmap(bitmap4);
                 FrameLayout.LayoutParams params4 = new FrameLayout.LayoutParams(50, 50);
@@ -182,37 +193,57 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         int y = (int) motionEvent.getY();
 
        // gestureDetector.onTouchEvent(motionEvent);
+        if (modeEdit ) {
 
-        switch (motionEvent.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                FrameLayout.LayoutParams lParams = (FrameLayout.LayoutParams) v.getLayoutParams();
-                xDelta = x - lParams.leftMargin;
-                yDelta = y - lParams.topMargin;
-                break;
-            case MotionEvent.ACTION_UP:
-                Log.d(TAG,"Закончили перетаскивание");
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    FrameLayout.LayoutParams lParams = (FrameLayout.LayoutParams) v.getLayoutParams();
+                    xDelta = x - lParams.leftMargin;
+                    yDelta = y - lParams.topMargin;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    Log.d(TAG, "Закончили перетаскивание");
+                    FrameLayout.LayoutParams laoutParamsS = (FrameLayout.LayoutParams) v.getLayoutParams();
+                    int tagid = (int) v.getTag();
+                    int selid = mDataManager.getDeviceModels().indexOf(new DeviceModel(tagid, "", "", 0));
+                    if (selid != -1) {
+                        DeviceModel model = mDataManager.getDeviceModels().get(selid);
+                        model.setX(laoutParamsS.leftMargin);
+                        model.setY(laoutParamsS.topMargin);
+                        mDataManager.updateDeviceModels(selid, model);
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (x - xDelta + v.getWidth() <= mFrameLayout.getWidth()
+                            && y - yDelta + v.getHeight() <= mFrameLayout.getHeight()
+                            && x - xDelta >= 0
+                            && y - yDelta >= 0) {
+                        FrameLayout.LayoutParams laoutParams = (FrameLayout.LayoutParams) v.getLayoutParams();
+                        laoutParams.leftMargin = x - xDelta;
+                        laoutParams.topMargin = y - yDelta;
+                        laoutParams.rightMargin = 0;
+                        laoutParams.bottomMargin = 0;
+                        v.setLayoutParams(laoutParams);
+                    }
+                    break;
+            }
+        } else {
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                Log.d(TAG, "Жамкнули");
+                FrameLayout.LayoutParams laoutParamsS = (FrameLayout.LayoutParams) v.getLayoutParams();
                 int tagid = (int) v.getTag();
-                int selid = mDataManager.getDeviceModels().indexOf(new DeviceModel(tagid,"","",0));
+                int selid = mDataManager.getDeviceModels().indexOf(new DeviceModel(tagid, "", "", 0));
                 if (selid != -1) {
-                    DeviceModel model = mDataManager.getDeviceModels().get(selid);
-                    model.setX(x);
-                    model.setY(y);
-                    mDataManager.updateDeviceModels(selid,model);
+                    DeviceModel record = mDataManager.getDeviceModels().get(selid);
+
+                    // открываем пульт управления
+                    mDataManager.setCurrentDevice(record);
+                    if (record.getControl() != null) {
+                        mDataManager.setDeviceControl(record.getControl());
+                    }
+                    ((MainActivity) getActivity()).viewFragment(new ControlFragment(), "CONTROL");
                 }
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (x - xDelta + v.getWidth() <= mFrameLayout.getWidth()
-                        && y - yDelta + v.getHeight() <= mFrameLayout.getHeight()
-                        && x - xDelta >= 0
-                        && y - yDelta >= 0){
-                    FrameLayout.LayoutParams laoutParams = (FrameLayout.LayoutParams) v.getLayoutParams();
-                    laoutParams.leftMargin = x  - xDelta;
-                    laoutParams.topMargin = y - yDelta;
-                    laoutParams.rightMargin = 0;
-                    laoutParams.bottomMargin = 0;
-                    v.setLayoutParams(laoutParams);
-                }
-                break;
+            }
         }
 
         mFrameLayout.invalidate();
