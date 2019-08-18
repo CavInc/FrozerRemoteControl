@@ -167,6 +167,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
 
         }
         img.setTag(id);
+        rotateImage(img,0,rotate);
         return img;
     }
 
@@ -192,12 +193,20 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
+    private void rotateImage(ImageView img,int from,int to){
+        RotateAnimation rotateAnimation = new RotateAnimation(from, to,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                0.5f);
+        rotateAnimation.setInterpolator(new LinearInterpolator());
+        rotateAnimation.setDuration(ANIMATION_DURATION);
+        rotateAnimation.setFillAfter(true);
+        img.startAnimation(rotateAnimation);
+    }
+
     @Override
     public boolean onTouch(View v, MotionEvent motionEvent) {
         int x = (int) motionEvent.getX();
         int y = (int) motionEvent.getY();
-
-
 
         if (modeEdit ) {
 
