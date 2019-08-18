@@ -44,6 +44,21 @@ public class DeviceModel {
         mControl = control;
     }
 
+    public DeviceModel(int id, String deviceID, String deviceName, DeviceControlModel controlModel,
+                       int iconId, int iconX, int iconY) {
+        mId = id;
+        mDeviceID = deviceID;
+        mDeviceName = deviceName;
+        mControl = controlModel;
+        mGraphId = iconId;
+        mX = iconX;
+        mY = iconY;
+    }
+
+    public DeviceModel(int id, String deviceID, String deviceName, int iconId, int iconX, int iconY) {
+
+    }
+
     public String getDeviceID() {
         return mDeviceID;
     }
@@ -98,6 +113,22 @@ public class DeviceModel {
 
     public boolean isVisible() {
         return mVisible;
+    }
+
+    public void setDirection(int direction) {
+        mDirection = direction;
+    }
+
+    public void setX(int x) {
+        mX = x;
+    }
+
+    public void setY(int y) {
+        mY = y;
+    }
+
+    public void setVisible(boolean visible) {
+        mVisible = visible;
     }
 
     @Override

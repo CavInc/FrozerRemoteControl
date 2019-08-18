@@ -135,6 +135,8 @@ public class DataManager {
             itm.put("deviceID",l.getDeviceID());
             itm.put("deviceName",l.getDeviceName());
             itm.put("icondId",l.getGraphId());
+            itm.put("iconX",l.getX());
+            itm.put("iconY",l.getY());
             if (l.getControl() != null) {
                 JSONObject control = new JSONObject();
                 control.put("controlTemperature",l.getControl().getControlTemperature());
@@ -192,15 +194,26 @@ public class DataManager {
                     if (lx.has("icondId")) {
                         iconId = lx.getInt("icondId");
                     }
+                    int iconX = 0;
+                    int iconY = 0;
+                    if (lx.has("iconX")) {
+                        iconX = lx.getInt("iconX");
+                    }
+                    if (lx.has("iconY")) {
+                        iconY = lx.getInt("iconY");
+                    }
+
                     if (lx.has("deviceControl")) {
                         JSONObject ct = (JSONObject) lx.get("deviceControl");
                         int cTemp = ct.getInt("controlTemperature");
                         int ho = ct.getInt("hto");
                         int hoff = ct.getInt("htoff");
                         DeviceControlModel controlModel = new DeviceControlModel(0,cTemp,ho,hoff,0);
-                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName"),controlModel,iconId));
+                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"),
+                                lx.getString("deviceName"),controlModel,iconId,iconX,iconY));
                     } else {
-                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"), lx.getString("deviceName"),iconId));
+                        recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"),
+                                lx.getString("deviceName"),iconId,iconX,iconY));
                     }
                 }
                 if (recModel.size() != 0 ){
