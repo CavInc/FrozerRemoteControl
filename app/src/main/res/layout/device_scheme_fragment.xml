@@ -16,6 +16,7 @@
         android:textStyle="bold" />
     <FrameLayout
         android:id="@+id/device_schema_map"
+        android:background="#202040"
         android:layout_below="@+id/device_list_bt"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

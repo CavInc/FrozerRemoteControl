@@ -45,7 +45,7 @@ public class DeviceModel {
     }
 
     public DeviceModel(int id, String deviceID, String deviceName, DeviceControlModel controlModel,
-                       int iconId, int iconX, int iconY) {
+                       int iconId, int iconX, int iconY,int iconAngle) {
         mId = id;
         mDeviceID = deviceID;
         mDeviceName = deviceName;
@@ -53,10 +53,16 @@ public class DeviceModel {
         mGraphId = iconId;
         mX = iconX;
         mY = iconY;
+        mDirection = iconAngle;
     }
 
     public DeviceModel(int id, String deviceID, String deviceName, int iconId, int iconX, int iconY) {
-
+        mId = id;
+        mDeviceID = deviceID;
+        mDeviceName = deviceName;
+        mGraphId = iconId;
+        mX = iconX;
+        mY = iconY;
     }
 
     public String getDeviceID() {

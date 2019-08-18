@@ -137,6 +137,7 @@ public class DataManager {
             itm.put("icondId",l.getGraphId());
             itm.put("iconX",l.getX());
             itm.put("iconY",l.getY());
+            itm.put("iconAngle",l.getDirection());
             if (l.getControl() != null) {
                 JSONObject control = new JSONObject();
                 control.put("controlTemperature",l.getControl().getControlTemperature());
@@ -202,6 +203,10 @@ public class DataManager {
                     if (lx.has("iconY")) {
                         iconY = lx.getInt("iconY");
                     }
+                    int inconAngle = 0;
+                    if (lx.has("iconAngle")) {
+                        inconAngle = lx.getInt("iconAngle");
+                    }
 
                     if (lx.has("deviceControl")) {
                         JSONObject ct = (JSONObject) lx.get("deviceControl");
@@ -210,7 +215,7 @@ public class DataManager {
                         int hoff = ct.getInt("htoff");
                         DeviceControlModel controlModel = new DeviceControlModel(0,cTemp,ho,hoff,0);
                         recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"),
-                                lx.getString("deviceName"),controlModel,iconId,iconX,iconY));
+                                lx.getString("deviceName"),controlModel,iconId,iconX,iconY,inconAngle));
                     } else {
                         recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"),
                                 lx.getString("deviceName"),iconId,iconX,iconY));

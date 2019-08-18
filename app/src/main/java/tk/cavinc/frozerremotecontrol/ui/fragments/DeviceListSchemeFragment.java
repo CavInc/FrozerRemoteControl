@@ -2,12 +2,8 @@ package tk.cavinc.frozerremotecontrol.ui.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.ArcShape;
-import android.graphics.drawable.shapes.RectShape;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +21,9 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -33,9 +33,10 @@ import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
-import tk.cavinc.frozerremotecontrol.ui.helper.SchemaSurfaceCallback;
+
 
 import static android.content.ContentValues.TAG;
+import static android.view.FrameMetrics.ANIMATION_DURATION;
 
 /**
  * Created by cav on 13.08.19.
@@ -44,14 +45,14 @@ import static android.content.ContentValues.TAG;
 public class DeviceListSchemeFragment extends Fragment implements View.OnClickListener,View.OnTouchListener {
     private DataManager mDataManager;
 
-    private SurfaceView mSurfaceView;
-
     private FrameLayout mFrameLayout;
     private int xDelta;
     private int yDelta;
     private boolean modeEdit = false;
     private MenuItem editItem;
     private MenuItem domeItem;
+
+    private GestureDetector mDetector;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,10 +67,9 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         View rootView = inflater.inflate(R.layout.device_scheme_fragment, container, false);
 
         rootView.findViewById(R.id.device_list_bt).setOnClickListener(this);
-       // mSurfaceView = rootView.findViewById(R.id.device_schema_map);
+        mFrameLayout  = rootView.findViewById(R.id.device_schema_map);
 
-      //  mSurfaceView.getHolder().addCallback(new SchemaSurfaceCallback(getActivity()));
-       mFrameLayout  = rootView.findViewById(R.id.device_schema_map);
+        mDetector = new GestureDetector(getActivity(),mGestureListener);
 
         return rootView;
     }
@@ -186,14 +186,42 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         return bitmap;
     }
 
+    public static Bitmap RotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
 
     @Override
     public boolean onTouch(View v, MotionEvent motionEvent) {
         int x = (int) motionEvent.getX();
         int y = (int) motionEvent.getY();
 
-       // gestureDetector.onTouchEvent(motionEvent);
+
+
         if (modeEdit ) {
+
+            if (mDetector.onTouchEvent(motionEvent)){
+                // повернем элемент
+                int selid =  getIdPositionItem(v);
+                DeviceModel model = mDataManager.getDeviceModels().get(selid);
+                int from = model.getDirection();
+                int to = from + 90 ;
+                if (to > 270) {
+                    to = 0;
+                }
+                model.setDirection(to);
+                mDataManager.updateDeviceModels(selid,model);
+
+                RotateAnimation rotateAnimation = new RotateAnimation(from, to,
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                        0.5f);
+                rotateAnimation.setInterpolator(new LinearInterpolator());
+                rotateAnimation.setDuration(ANIMATION_DURATION);
+                rotateAnimation.setFillAfter(true);
+
+                (v).startAnimation(rotateAnimation);
+            }
 
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -204,8 +232,11 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                 case MotionEvent.ACTION_UP:
                     Log.d(TAG, "Закончили перетаскивание");
                     FrameLayout.LayoutParams laoutParamsS = (FrameLayout.LayoutParams) v.getLayoutParams();
+                    int selid =  getIdPositionItem(v);
+                    /*
                     int tagid = (int) v.getTag();
                     int selid = mDataManager.getDeviceModels().indexOf(new DeviceModel(tagid, "", "", 0));
+                    */
                     if (selid != -1) {
                         DeviceModel model = mDataManager.getDeviceModels().get(selid);
                         model.setX(laoutParamsS.leftMargin);
@@ -230,9 +261,12 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         } else {
             if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 Log.d(TAG, "Жамкнули");
+                /*
                 FrameLayout.LayoutParams laoutParamsS = (FrameLayout.LayoutParams) v.getLayoutParams();
                 int tagid = (int) v.getTag();
                 int selid = mDataManager.getDeviceModels().indexOf(new DeviceModel(tagid, "", "", 0));
+                */
+                int selid =  getIdPositionItem(v);
                 if (selid != -1) {
                     DeviceModel record = mDataManager.getDeviceModels().get(selid);
 
@@ -249,4 +283,18 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         mFrameLayout.invalidate();
         return true;
     }
+
+    private int getIdPositionItem(View v) {
+        int tagid = (int) v.getTag();
+        int selid = mDataManager.getDeviceModels().indexOf(new DeviceModel(tagid, "", "", 0));
+        return selid;
+    }
+
+    GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener(){
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            Log.d(TAG,"DOUBLE TAP");
+            return true;
+        }
+    };
 }

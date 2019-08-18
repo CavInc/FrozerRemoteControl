@@ -7,8 +7,8 @@ android {
         applicationId "tk.cavinc.frozerremotecontrol"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 9
-        versionName "1.0.7"
+        versionCode 10
+        versionName "1.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         project.ext.set("archivesBaseName", "FrozenRemoteControl-" + defaultConfig.versionName);
         resConfigs "en", "ru"
