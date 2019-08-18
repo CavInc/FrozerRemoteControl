@@ -13,6 +13,7 @@ public class DeviceModel {
     private int mDirection = 0; // угол поворота
     private int mX = 0;
     private int mY = 0;
+    private boolean mVisible = false; // перенесено ли на схему
 
 
     public DeviceModel(int id, String deviceID, String deviceName) {
@@ -93,6 +94,10 @@ public class DeviceModel {
 
     public int getY() {
         return mY;
+    }
+
+    public boolean isVisible() {
+        return mVisible;
     }
 
     @Override

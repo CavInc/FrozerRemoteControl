@@ -10,6 +10,8 @@ import android.graphics.Picture;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Display;
@@ -70,8 +72,24 @@ public class DrawViewSchema2 extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(4);
         canvas.drawRect(10,200,50,220,mPaint);
+        drawFR1(canvas,40,300,90);
+    }
+
+    private void drawFR1(Canvas canvas,int x,int y,int arg){
+        canvas.drawRect(x,y,x+20,y+20,mPaint);
+        canvas.drawRect(x,y,x+15,y+20,mPaint);
+    }
+
+    private void drawFR2(Canvas canvas,int x, int y,int arg) {
 
     }
 
+    private void drawShape(){
+        ShapeDrawable x = new ShapeDrawable(new RectShape());
+        x.getPaint().setColor(Color.argb(100,200,100,200));
+        x.setIntrinsicHeight(5);
+        x.setIntrinsicWidth(150);
+        //this.setBackground(x);
+    }
 
 }
