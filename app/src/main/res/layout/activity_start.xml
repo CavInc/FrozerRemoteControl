@@ -17,6 +17,7 @@
         android:id="@+id/start_id_et"
         android:textColor="@color/app_ligth_blue"
         android:textSize="18sp"
+        android:inputType="textUri"
         android:layout_below="@+id/start_text"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="16dp"

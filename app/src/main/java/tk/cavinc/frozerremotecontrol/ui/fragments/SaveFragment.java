@@ -74,16 +74,23 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
         if (model.getId() == -1) {
             int lastID = mDataManager.getDeviceModels().size();
-            model.setId(lastID+1);
+            if (lastID != 0) {
+                int id = mDataManager.getDeviceModels().get(lastID-1).getId();
+                model.setId(id + 1);
+            } else {
+                model.setId(lastID + 1);
+            }
             model.setDeviceName(mDeviceName.getText().toString());
             model.setControl(mDataManager.getDeviceControl());
             model.setGraphId(iconId);
             mDataManager.addNewDeviceModel(model);
         } else {
+            /*
             model.setDeviceName(mDeviceName.getText().toString());
             model.setControl(mDataManager.getDeviceControl());
             model.setGraphId(iconId);
             mDataManager.updateDeviceModels(model.getId(),model);
+            */
         }
     }
 
