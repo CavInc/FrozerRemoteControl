@@ -269,6 +269,12 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                         FrameLayout.LayoutParams laparam = (FrameLayout.LayoutParams) selected_item.getLayoutParams();
 
                         int selid =  getIdPositionItem(selected_item);
+
+                        checkLips(laparam.leftMargin,laparam.topMargin,
+                                selected_item.getWidth()-laparam.leftMargin,
+                                selected_item.getHeight()-laparam.topMargin,
+                                (Integer) selected_item.getTag());
+
                         if (selid != -1) {
                             DeviceModel model = mDataManager.getDeviceModels().get(selid);
                             model.setX(laparam.leftMargin);
@@ -428,6 +434,8 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
             int y = v.getTop();
             int rigthX = v.getRight();
             int bottomY = v.getBottom();
+
+            Log.d(TAG,"Coord : "+x+" "+y+" "+rigthX+" "+bottomY+" id :"+id+" TAG :"+v.getTag());
 
             // проверяем вершины
             // A = B1
