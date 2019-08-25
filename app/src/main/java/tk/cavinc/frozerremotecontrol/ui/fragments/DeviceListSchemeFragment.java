@@ -72,6 +72,8 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
 
         mDetector = new GestureDetector(getActivity(),mGestureListener);
 
+        mFrameLayout.setOnTouchListener(mFrameLayoutTouchListener);
+
         return rootView;
     }
 
@@ -204,8 +206,136 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         img.startAnimation(rotateAnimation);
     }
 
+
+    View.OnTouchListener mFrameLayoutTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (touchFlag) {
+
+                if (mDetector.onTouchEvent(event)){
+                    // повернем элемент
+                    int selid =  getIdPositionItem(selected_item);
+                    DeviceModel model = mDataManager.getDeviceModels().get(selid);
+                    int from = model.getDirection();
+                    int to = from + 90 ;
+                    if (to > 270) {
+                        to = 0;
+                    }
+                    model.setDirection(to);
+                    mDataManager.updateDeviceModels(selid,model);
+
+                    RotateAnimation rotateAnimation = new RotateAnimation(from, to,
+                            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                            0.5f);
+                    rotateAnimation.setInterpolator(new LinearInterpolator());
+                    rotateAnimation.setDuration(ANIMATION_DURATION);
+                    rotateAnimation.setFillAfter(true);
+
+                    (selected_item).startAnimation(rotateAnimation);
+                }
+
+
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        eX = (int) event.getX();
+                        eY = (int) event.getY();
+                        int x = (int) event.getX() - offset_x;
+                        int y = (int) event.getY() - offset_y;
+
+                        int w = mFrameLayout.getWidth()-selected_item.getWidth();
+                        int h = mFrameLayout.getHeight()-selected_item.getHeight();
+
+                        if (x > w) x = w;
+                        if (y > h) y = h;
+                        if (x < 0 ) x = 0;
+                        if (y < 0) y = 0;
+
+                        /*
+                        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                                new ViewGroup.MarginLayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT));
+                        */
+
+                        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) selected_item.getLayoutParams();
+
+
+                        lp.setMargins(x,y,0,0);
+                        selected_item.setLayoutParams(lp);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.d(TAG, "Закончили перетаскивание");
+
+                        FrameLayout.LayoutParams laparam = (FrameLayout.LayoutParams) selected_item.getLayoutParams();
+
+                        int selid =  getIdPositionItem(selected_item);
+                        if (selid != -1) {
+                            DeviceModel model = mDataManager.getDeviceModels().get(selid);
+                            model.setX(laparam.leftMargin);
+                            model.setY(laparam.topMargin);
+                            mDataManager.updateDeviceModels(selid, model);
+                        }
+
+                        touchFlag = false;
+                        if (dropFlag) {
+                            dropFlag = false;
+                        } /*else {
+                            selected_item.setLayoutParams(imageParams);
+                        } */
+                        break;
+                }
+            }
+            return true;
+        }
+    };
+
+    private int offset_x = 0;
+    private int offset_y = 0;
+    boolean touchFlag = false;
+    boolean dropFlag = false;
+    private View selected_item = null;
+    ViewGroup.LayoutParams imageParams;
+    int eX, eY;
+
     @Override
     public boolean onTouch(View v, MotionEvent motionEvent) {
+        if (modeEdit ) {
+            switch (motionEvent.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    touchFlag = true;
+                    offset_x = (int) motionEvent.getX();
+                    offset_y = (int) motionEvent.getY();
+                    selected_item = v;
+                    imageParams = v.getLayoutParams();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    selected_item = null;
+                    touchFlag = false;
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                Log.d(TAG, "Жамкнули");
+                int selid =  getIdPositionItem(v);
+                if (selid != -1) {
+                    DeviceModel record = mDataManager.getDeviceModels().get(selid);
+
+                    // открываем пульт управления
+                    mDataManager.setCurrentDevice(record);
+                    if (record.getControl() != null) {
+                        mDataManager.setDeviceControl(record.getControl());
+                    }
+                    ((MainActivity) getActivity()).viewFragment(new ControlFragment(), "CONTROL");
+                }
+            }
+            return true;
+        }
+        return false;
+
+        /*
+
         int x = (int) motionEvent.getX();
         int y = (int) motionEvent.getY();
 
@@ -243,10 +373,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                     Log.d(TAG, "Закончили перетаскивание");
                     FrameLayout.LayoutParams laoutParamsS = (FrameLayout.LayoutParams) v.getLayoutParams();
                     int selid =  getIdPositionItem(v);
-                    /*
-                    int tagid = (int) v.getTag();
-                    int selid = mDataManager.getDeviceModels().indexOf(new DeviceModel(tagid, "", "", 0));
-                    */
+
                     if (selid != -1) {
                         DeviceModel model = mDataManager.getDeviceModels().get(selid);
                         model.setX(laoutParamsS.leftMargin);
@@ -267,25 +394,12 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                         laoutParams.bottomMargin = 0;
 
                         v.setLayoutParams(laoutParams);
-
-                        /*
-                        v.animate()
-                                .x(motionEvent.getRawX() - xDelta)
-                                .y(motionEvent.getRawY() - yDelta)
-                                .setDuration(0)
-                                .start();
-                        */
                     }
                     break;
             }
         } else {
             if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 Log.d(TAG, "Жамкнули");
-                /*
-                FrameLayout.LayoutParams laoutParamsS = (FrameLayout.LayoutParams) v.getLayoutParams();
-                int tagid = (int) v.getTag();
-                int selid = mDataManager.getDeviceModels().indexOf(new DeviceModel(tagid, "", "", 0));
-                */
                 int selid =  getIdPositionItem(v);
                 if (selid != -1) {
                     DeviceModel record = mDataManager.getDeviceModels().get(selid);
@@ -302,6 +416,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
 
         mFrameLayout.invalidate();
         return true;
+        */
     }
 
     private void checkLips(int currentX,int currentY,int currentRigth,int currentBottom,int id){
