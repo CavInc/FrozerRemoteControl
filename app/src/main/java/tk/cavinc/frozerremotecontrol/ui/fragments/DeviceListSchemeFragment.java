@@ -37,6 +37,7 @@ import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
 
 import static android.content.ContentValues.TAG;
 import static android.view.FrameMetrics.ANIMATION_DURATION;
+import static java.lang.Math.abs;
 
 /**
  * Created by cav on 13.08.19.
@@ -258,12 +259,22 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                             && y - yDelta + v.getHeight() <= mFrameLayout.getHeight()
                             && x - xDelta >= 0
                             && y - yDelta >= 0) {
+
                         FrameLayout.LayoutParams laoutParams = (FrameLayout.LayoutParams) v.getLayoutParams();
                         laoutParams.leftMargin = x - xDelta;
                         laoutParams.topMargin = y - yDelta;
                         laoutParams.rightMargin = 0;
                         laoutParams.bottomMargin = 0;
+
                         v.setLayoutParams(laoutParams);
+
+                        /*
+                        v.animate()
+                                .x(motionEvent.getRawX() - xDelta)
+                                .y(motionEvent.getRawY() - yDelta)
+                                .setDuration(0)
+                                .start();
+                        */
                     }
                     break;
             }
@@ -290,6 +301,34 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         }
 
         mFrameLayout.invalidate();
+        return true;
+    }
+
+    private void checkLips(int currentX,int currentY,int currentRigth,int currentBottom,int id){
+        for (int i=0; i< mFrameLayout.getChildCount(); i++){
+            View v = mFrameLayout.getChildAt(i);
+            if (id == (int )v.getTag()) continue;
+
+            int x = v.getLeft();
+            int y = v.getTop();
+            int rigthX = v.getRight();
+            int bottomY = v.getBottom();
+
+            // проверяем вершины
+            // A = B1
+            // A = C1
+            //
+
+        }
+    }
+
+    private static final int DELTA_SIZE = 5;
+
+    private boolean testDelta(int d1,int d2){
+        int delta = abs(d1-d2);
+        if (delta > DELTA_SIZE ) {
+            return false;
+        }
         return true;
     }
 
