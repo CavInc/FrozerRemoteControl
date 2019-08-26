@@ -38,6 +38,7 @@ import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
 import static android.content.ContentValues.TAG;
 import static android.view.FrameMetrics.ANIMATION_DURATION;
 import static java.lang.Math.abs;
+import static java.lang.Math.incrementExact;
 
 /**
  * Created by cav on 13.08.19.
@@ -271,8 +272,8 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                         int selid =  getIdPositionItem(selected_item);
 
                         checkLips(laparam.leftMargin,laparam.topMargin,
-                                selected_item.getWidth()-laparam.leftMargin,
-                                selected_item.getHeight()-laparam.topMargin,
+                                laparam.leftMargin+selected_item.getWidth(),
+                                laparam.topMargin+selected_item.getHeight(),
                                 (Integer) selected_item.getTag());
 
                         if (selid != -1) {
@@ -434,18 +435,43 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
             int y = v.getTop();
             int rigthX = v.getRight();
             int bottomY = v.getBottom();
+            int rX = rigthX;
+            int bY = bottomY - v.getHeight();
+            int x1 = x;
+            int y1 = bottomY;
 
             Log.d(TAG,"Coord : "+x+" "+y+" "+rigthX+" "+bottomY+" id :"+id+" TAG :"+v.getTag());
+            Log.d(TAG,"COORDX XX :"+x1+" "+y1+" "+rX+" "+bY);
 
             // проверяем вершины
-            // A = B1
+            // A = B1  (
             // A = C1
-            //
+            // A = D1
+            // B = A1
+            // B = C1
+            // B = D1
+            // C = A1
+            // C = B1
+            // C = D1
+            // D = A1
+            // D = C1
+            // D = B1
+            Log.d(TAG,"ITEM CURRENT :"+currentX+" "+currentY+" "+currentRigth+" "+currentBottom);
+            if (testDelta(currentX,rX) && testDelta(currentY,bY)) {
+                // A = B1
+                Log.d(TAG,"YES A = B1");
+            }
+            if (testDelta(currentX,x1) && testDelta(currentY,y1)) {
+                Log.d(TAG,"YES A = C1");
+            }
+            if (testDelta(currentX,rigthX) && testDelta(currentY,bottomY)) {
+                Log.d(TAG,"YES A = D1");
+            }
 
         }
     }
 
-    private static final int DELTA_SIZE = 5;
+    private static final int DELTA_SIZE = 25;
 
     private boolean testDelta(int d1,int d2){
         int delta = abs(d1-d2);
