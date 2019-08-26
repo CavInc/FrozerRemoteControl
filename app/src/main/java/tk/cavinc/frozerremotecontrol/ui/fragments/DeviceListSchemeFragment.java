@@ -2,6 +2,7 @@ package tk.cavinc.frozerremotecontrol.ui.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -129,6 +130,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
 
     private ImageView setImageView(int x,int y,int rotate,int type,int id){
         ImageView img = new ImageView(getActivity());
+        img.setBackgroundColor(Color.CYAN);
         switch (type) {
             case 1:
                 Bitmap bitmap1 = getVectorBitmap(R.drawable.ic_fr1);
@@ -170,6 +172,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                 break;
 
         }
+
         img.setTag(id);
         rotateImage(img,0,rotate);
         return img;
