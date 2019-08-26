@@ -130,7 +130,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
 
     private ImageView setImageView(int x,int y,int rotate,int type,int id){
         ImageView img = new ImageView(getActivity());
-        img.setBackgroundColor(Color.CYAN);
+        img.setBackgroundColor(Color.argb(100,255,100,100));
         switch (type) {
             case 1:
                 Bitmap bitmap1 = getVectorBitmap(R.drawable.ic_fr1);
@@ -446,6 +446,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
             Log.d(TAG,"Coord : "+x+" "+y+" "+rigthX+" "+bottomY+" id :"+id+" TAG :"+v.getTag());
             Log.d(TAG,"COORDX XX :"+x1+" "+y1+" "+rX+" "+bY);
 
+
             // проверяем вершины
             // A = B1  (
             // A = C1
@@ -460,6 +461,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
             // D = C1
             // D = B1
             Log.d(TAG,"ITEM CURRENT :"+currentX+" "+currentY+" "+currentRigth+" "+currentBottom);
+            // A =
             if (testDelta(currentX,rX) && testDelta(currentY,bY)) {
                 // A = B1
                 Log.d(TAG,"YES A = B1");
@@ -470,7 +472,30 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
             if (testDelta(currentX,rigthX) && testDelta(currentY,bottomY)) {
                 Log.d(TAG,"YES A = D1");
             }
-
+            // D =
+            if (testDelta(currentRigth,x) && testDelta(currentBottom,y)){
+                Log.d(TAG,"YES D = A1");
+            }
+            if (testDelta(currentRigth,x1) && testDelta(currentBottom,y1)) {
+                Log.d(TAG,"YES D = C1");
+            }
+            // C =
+            if (testDelta(currentX,x) && testDelta(currentBottom,y)) {
+                Log.d(TAG,"YES C = A1");
+            }
+            if (testDelta(currentX,rX) && testDelta(currentBottom,bY)) {
+                Log.d(TAG,"YES C = B1");
+            }
+            // B =
+            if (testDelta(currentRigth,x) && testDelta(currentY,y)) {
+                Log.d(TAG,"YES B = A1");
+            }
+            if (testDelta(currentRigth,x1) && testDelta(currentY,y1)) {
+                Log.d(TAG,"YES B = C1");
+            }
+            if (testDelta(currentRigth,rigthX) && testDelta(currentY,bottomY)) {
+                Log.d(TAG,"YES B = D1");
+            }
         }
     }
 
