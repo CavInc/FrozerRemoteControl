@@ -130,7 +130,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
 
     private ImageView setImageView(int x,int y,int rotate,int type,int id){
         ImageView img = new ImageView(getActivity());
-        img.setBackgroundColor(Color.argb(100,255,100,100));
+        //img.setBackgroundColor(Color.argb(100,255,100,100));
         switch (type) {
             case 1:
                 Bitmap bitmap1 = getVectorBitmap(R.drawable.ic_fr1);
@@ -143,6 +143,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                 break;
             case 2:
                 Bitmap bitmap2 = getVectorBitmap(R.drawable.ic_fr2);
+                bitmap2 = RotateBitmap(bitmap2,rotate);
                 img.setImageBitmap(bitmap2);
                 img.setScaleType(ImageView.ScaleType.FIT_XY);
                 FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(120, 50);
@@ -153,9 +154,15 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                 break;
             case 3:
                 Bitmap bitmap3 = getVectorBitmap(R.drawable.ic_fr3);
+                bitmap3 = RotateBitmap(bitmap3,rotate);
                 img.setImageBitmap(bitmap3);
                 img.setScaleType(ImageView.ScaleType.FIT_XY);
-                FrameLayout.LayoutParams params3 = new FrameLayout.LayoutParams(100, 50);
+                FrameLayout.LayoutParams params3;
+                if (rotate == 90 || rotate == 270) {
+                    params3 = new FrameLayout.LayoutParams(50,100);
+                } else {
+                    params3 = new FrameLayout.LayoutParams(100, 50);
+                }
                 params3.leftMargin = x;
                 params3.topMargin = y;
                 img.setLayoutParams(params3);
@@ -174,7 +181,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         }
 
         img.setTag(id);
-        rotateImage(img,0,rotate);
+        //rotateImage(img,0,rotate);
         return img;
     }
 
@@ -201,6 +208,10 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
     }
 
     private void rotateImage(ImageView img,int from,int to){
+        int w = img.getWidth();
+        int h = img.getHeight();
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) img.getLayoutParams();
+
         RotateAnimation rotateAnimation = new RotateAnimation(from, to,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                 0.5f);
@@ -208,6 +219,17 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         rotateAnimation.setDuration(ANIMATION_DURATION);
         rotateAnimation.setFillAfter(true);
         img.startAnimation(rotateAnimation);
+        FrameLayout.LayoutParams lp2 = (FrameLayout.LayoutParams) img.getLayoutParams();
+        Log.d(TAG,"LP : "+lp.width+" "+lp.height);
+        Log.d(TAG,"LP AF : "+lp.width+" "+lp.height);
+
+        /*
+        if (to == 90) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(h, w);
+            params.setMargins(lp.leftMargin,lp.topMargin,0,0);
+            img.setLayoutParams(params);
+        }
+        */
     }
 
 
