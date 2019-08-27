@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -134,6 +135,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         switch (type) {
             case 1:
                 Bitmap bitmap1 = getVectorBitmap(R.drawable.ic_fr1);
+                bitmap1 = RotateBitmap(bitmap1,rotate);
                 img.setImageBitmap(bitmap1);
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(50, 50);
                 params.leftMargin = x;
@@ -146,7 +148,13 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                 bitmap2 = RotateBitmap(bitmap2,rotate);
                 img.setImageBitmap(bitmap2);
                 img.setScaleType(ImageView.ScaleType.FIT_XY);
-                FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(120, 50);
+                FrameLayout.LayoutParams params2;
+                if (rotate == 90 || rotate == 270) {
+                    params2 = new FrameLayout.LayoutParams(50, 120);
+                 } else {
+                    params2 = new FrameLayout.LayoutParams(120, 50);
+                }
+
                 params2.leftMargin = x;
                 params2.topMargin = y;
                 img.setLayoutParams(params2);
@@ -170,6 +178,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                 break;
             case 4:
                 Bitmap bitmap4 = getVectorBitmap(R.drawable.ic_fr4);
+                bitmap4 = RotateBitmap(bitmap4,rotate);
                 img.setImageBitmap(bitmap4);
                 FrameLayout.LayoutParams params4 = new FrameLayout.LayoutParams(50, 50);
                 params4.leftMargin = x;
@@ -222,16 +231,25 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
         FrameLayout.LayoutParams lp2 = (FrameLayout.LayoutParams) img.getLayoutParams();
         Log.d(TAG,"LP : "+lp.width+" "+lp.height);
         Log.d(TAG,"LP AF : "+lp.width+" "+lp.height);
-
-        /*
-        if (to == 90) {
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(h, w);
-            params.setMargins(lp.leftMargin,lp.topMargin,0,0);
-            img.setLayoutParams(params);
-        }
-        */
     }
 
+    private void rotateImageBm(ImageView img,int angle){
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) img.getLayoutParams();
+        BitmapDrawable drawable = (BitmapDrawable) img.getDrawable();
+        Bitmap bmp = drawable.getBitmap();
+        bmp = RotateBitmap(bmp,angle);
+        int w = img.getWidth();
+        int h = img.getHeight();
+        img.setImageBitmap(bmp);
+        FrameLayout.LayoutParams params;
+        if (angle == 90 || angle == 270) {
+            params = new FrameLayout.LayoutParams(h,w);
+        } else {
+            params = new FrameLayout.LayoutParams(w,h);
+        }
+        params.setMargins(lp.leftMargin,lp.topMargin,0,0);
+        img.setLayoutParams(params);
+    }
 
     View.OnTouchListener mFrameLayoutTouchListener = new View.OnTouchListener() {
         @Override
@@ -250,6 +268,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                     model.setDirection(to);
                     mDataManager.updateDeviceModels(selid,model);
 
+                    /*
                     RotateAnimation rotateAnimation = new RotateAnimation(from, to,
                             Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                             0.5f);
@@ -258,6 +277,8 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                     rotateAnimation.setFillAfter(true);
 
                     (selected_item).startAnimation(rotateAnimation);
+                    */
+                    rotateImageBm((ImageView) selected_item,to);
                 }
 
 
@@ -461,7 +482,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
             }
             if (testDelta(currentRigth,x1) && testDelta(currentBottom,y1)) {
                 Log.d(TAG,"YES D = C1");
-                rec = new CorrectCoordinate(true,x1-(currentRigth-currentX),y1);
+                rec = new CorrectCoordinate(true,x1-(currentRigth-currentX),y1-(currentBottom-currentY));
                 return rec;
             }
         }
