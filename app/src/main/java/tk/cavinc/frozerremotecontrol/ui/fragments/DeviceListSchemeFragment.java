@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -32,6 +31,7 @@ import java.util.ArrayList;
 
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
+import tk.cavinc.frozerremotecontrol.data.models.CorrectCoordinate;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
 
@@ -274,18 +274,25 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
 
                         int selid =  getIdPositionItem(selected_item);
 
-                        checkLips(laparam.leftMargin,laparam.topMargin,
-                                laparam.leftMargin+selected_item.getWidth(),
-                                laparam.topMargin+selected_item.getHeight(),
+                        CorrectCoordinate res = checkLips(laparam.leftMargin, laparam.topMargin,
+                                laparam.leftMargin + selected_item.getWidth(),
+                                laparam.topMargin + selected_item.getHeight(),
                                 (Integer) selected_item.getTag());
+                        int cX = laparam.leftMargin;
+                        int cY = laparam.topMargin;
+                        if (res != null && res.isCorrect()) {
+                            cX = res.getX();
+                            cY = res.getY();
+                        }
 
                         if (selid != -1) {
                             DeviceModel model = mDataManager.getDeviceModels().get(selid);
-                            model.setX(laparam.leftMargin);
-                            model.setY(laparam.topMargin);
+                            model.setX(cX);
+                            model.setY(cY);
                             mDataManager.updateDeviceModels(selid, model);
                         }
-
+                        laparam.setMargins(cX,cY,0,0);
+                        selected_item.setLayoutParams(laparam);
                         touchFlag = false;
                         if (dropFlag) {
                             dropFlag = false;
@@ -295,6 +302,7 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
                         break;
                 }
             }
+            //mFrameLayout.invalidate();
             return true;
         }
     };
@@ -343,93 +351,10 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
             return true;
         }
         return false;
-
-        /*
-
-        int x = (int) motionEvent.getX();
-        int y = (int) motionEvent.getY();
-
-        if (modeEdit ) {
-
-            if (mDetector.onTouchEvent(motionEvent)){
-                // повернем элемент
-                int selid =  getIdPositionItem(v);
-                DeviceModel model = mDataManager.getDeviceModels().get(selid);
-                int from = model.getDirection();
-                int to = from + 90 ;
-                if (to > 270) {
-                    to = 0;
-                }
-                model.setDirection(to);
-                mDataManager.updateDeviceModels(selid,model);
-
-                RotateAnimation rotateAnimation = new RotateAnimation(from, to,
-                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                        0.5f);
-                rotateAnimation.setInterpolator(new LinearInterpolator());
-                rotateAnimation.setDuration(ANIMATION_DURATION);
-                rotateAnimation.setFillAfter(true);
-
-                (v).startAnimation(rotateAnimation);
-            }
-
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    FrameLayout.LayoutParams lParams = (FrameLayout.LayoutParams) v.getLayoutParams();
-                    xDelta = x - lParams.leftMargin;
-                    yDelta = y - lParams.topMargin;
-                    break;
-                case MotionEvent.ACTION_UP:
-                    Log.d(TAG, "Закончили перетаскивание");
-                    FrameLayout.LayoutParams laoutParamsS = (FrameLayout.LayoutParams) v.getLayoutParams();
-                    int selid =  getIdPositionItem(v);
-
-                    if (selid != -1) {
-                        DeviceModel model = mDataManager.getDeviceModels().get(selid);
-                        model.setX(laoutParamsS.leftMargin);
-                        model.setY(laoutParamsS.topMargin);
-                        mDataManager.updateDeviceModels(selid, model);
-                    }
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    if (x - xDelta + v.getWidth() <= mFrameLayout.getWidth()
-                            && y - yDelta + v.getHeight() <= mFrameLayout.getHeight()
-                            && x - xDelta >= 0
-                            && y - yDelta >= 0) {
-
-                        FrameLayout.LayoutParams laoutParams = (FrameLayout.LayoutParams) v.getLayoutParams();
-                        laoutParams.leftMargin = x - xDelta;
-                        laoutParams.topMargin = y - yDelta;
-                        laoutParams.rightMargin = 0;
-                        laoutParams.bottomMargin = 0;
-
-                        v.setLayoutParams(laoutParams);
-                    }
-                    break;
-            }
-        } else {
-            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                Log.d(TAG, "Жамкнули");
-                int selid =  getIdPositionItem(v);
-                if (selid != -1) {
-                    DeviceModel record = mDataManager.getDeviceModels().get(selid);
-
-                    // открываем пульт управления
-                    mDataManager.setCurrentDevice(record);
-                    if (record.getControl() != null) {
-                        mDataManager.setDeviceControl(record.getControl());
-                    }
-                    ((MainActivity) getActivity()).viewFragment(new ControlFragment(), "CONTROL");
-                }
-            }
-        }
-
-        mFrameLayout.invalidate();
-        return true;
-        */
     }
 
-    private void checkLips(int currentX,int currentY,int currentRigth,int currentBottom,int id){
+    private CorrectCoordinate checkLips(int currentX, int currentY, int currentRigth, int currentBottom, int id){
+        CorrectCoordinate rec = null;
         for (int i=0; i< mFrameLayout.getChildCount(); i++){
             View v = mFrameLayout.getChildAt(i);
             if (id == (int )v.getTag()) continue;
@@ -465,41 +390,63 @@ public class DeviceListSchemeFragment extends Fragment implements View.OnClickLi
             if (testDelta(currentX,rX) && testDelta(currentY,bY)) {
                 // A = B1
                 Log.d(TAG,"YES A = B1");
+                rec = new CorrectCoordinate(true,rX,bY);
+                return rec;
             }
             if (testDelta(currentX,x1) && testDelta(currentY,y1)) {
                 Log.d(TAG,"YES A = C1");
+                rec = new CorrectCoordinate(true,x1,y1);
+                return rec;
             }
             if (testDelta(currentX,rigthX) && testDelta(currentY,bottomY)) {
                 Log.d(TAG,"YES A = D1");
+                rec = new CorrectCoordinate(true,rigthX,bottomY);
+                return rec;
             }
-            // D =
-            if (testDelta(currentRigth,x) && testDelta(currentBottom,y)){
-                Log.d(TAG,"YES D = A1");
-            }
-            if (testDelta(currentRigth,x1) && testDelta(currentBottom,y1)) {
-                Log.d(TAG,"YES D = C1");
-            }
+
             // C =
             if (testDelta(currentX,x) && testDelta(currentBottom,y)) {
                 Log.d(TAG,"YES C = A1");
+                rec = new CorrectCoordinate(true,x,y-(currentBottom-currentY));
+                return rec;
             }
             if (testDelta(currentX,rX) && testDelta(currentBottom,bY)) {
                 Log.d(TAG,"YES C = B1");
+                rec = new CorrectCoordinate(true,rX,bY-(currentBottom-currentY));
+                return rec;
             }
             // B =
             if (testDelta(currentRigth,x) && testDelta(currentY,y)) {
                 Log.d(TAG,"YES B = A1");
+                rec = new CorrectCoordinate(true,x-(currentRigth-currentX),y);
+                return rec;
             }
             if (testDelta(currentRigth,x1) && testDelta(currentY,y1)) {
                 Log.d(TAG,"YES B = C1");
+                rec = new CorrectCoordinate(true,x1-(currentRigth-currentX),y1);
+                return rec;
             }
             if (testDelta(currentRigth,rigthX) && testDelta(currentY,bottomY)) {
                 Log.d(TAG,"YES B = D1");
+                rec = new CorrectCoordinate(true,rigthX,bottomY);
+                return rec;
+            }
+            // D =
+            if (testDelta(currentRigth,x) && testDelta(currentBottom,y)){
+                Log.d(TAG,"YES D = A1");
+                rec = new CorrectCoordinate(true,x-(currentRigth-currentX),y-(currentBottom-currentY));
+                return rec;
+            }
+            if (testDelta(currentRigth,x1) && testDelta(currentBottom,y1)) {
+                Log.d(TAG,"YES D = C1");
+                rec = new CorrectCoordinate(true,x1-(currentRigth-currentX),y1);
+                return rec;
             }
         }
+        return rec;
     }
 
-    private static final int DELTA_SIZE = 25;
+    private static final int DELTA_SIZE = 15;
 
     private boolean testDelta(int d1,int d2){
         int delta = abs(d1-d2);
