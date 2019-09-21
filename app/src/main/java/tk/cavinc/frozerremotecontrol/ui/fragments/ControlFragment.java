@@ -2,6 +2,7 @@ package tk.cavinc.frozerremotecontrol.ui.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.data.models.RequestReturnModel;
 import tk.cavinc.frozerremotecontrol.data.network.Request;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
+import tk.cavinc.frozerremotecontrol.ui.dialogs.WiFiSettingDialog;
 import tk.cavinc.frozerremotecontrol.utils.ParseData;
 
 import static android.content.ContentValues.TAG;
@@ -81,6 +83,8 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.control_reset).setOnClickListener(this);
 
         rootView.findViewById(R.id.control_send_change).setOnClickListener(this);
+
+        rootView.findViewById(R.id.control_wifi_data).setOnClickListener(this);
 
         return rootView;
     }
@@ -163,6 +167,10 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         }
         if (view.getId() == R.id.control_reset) {
             resetData();
+        }
+        if (view.getId() == R.id.control_wifi_data) {
+            WiFiSettingDialog dialog = new WiFiSettingDialog();
+            dialog.show(getActivity().getFragmentManager(),"WSD");
         }
     }
 

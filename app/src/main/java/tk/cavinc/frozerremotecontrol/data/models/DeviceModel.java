@@ -14,6 +14,8 @@ public class DeviceModel {
     private int mX = 0;
     private int mY = 0;
     private boolean mVisible = false; // перенесено ли на схему
+    private String mWifiSSID; // название точки
+
 
 
     public DeviceModel(int id, String deviceID, String deviceName) {
@@ -135,6 +137,10 @@ public class DeviceModel {
 
     public void setVisible(boolean visible) {
         mVisible = visible;
+    }
+
+    public String getWifiSSID() {
+        return mWifiSSID;
     }
 
     @Override
