@@ -48,7 +48,7 @@ public class DeviceModel {
     }
 
     public DeviceModel(int id, String deviceID, String deviceName, DeviceControlModel controlModel,
-                       int iconId, int iconX, int iconY,int iconAngle,String wifiSSID) {
+                       int iconId, int iconX, int iconY,int iconAngle,String wifiSSID,String wifipass) {
         mId = id;
         mDeviceID = deviceID;
         mDeviceName = deviceName;
@@ -58,9 +58,11 @@ public class DeviceModel {
         mY = iconY;
         mDirection = iconAngle;
         mWifiSSID = wifiSSID;
+        mWifiPass = wifipass;
     }
 
-    public DeviceModel(int id, String deviceID, String deviceName, int iconId, int iconX, int iconY,String wifiSSID) {
+    public DeviceModel(int id, String deviceID, String deviceName, int iconId, int iconX, int iconY,
+                       String wifiSSID,String wifipass) {
         mId = id;
         mDeviceID = deviceID;
         mDeviceName = deviceName;
@@ -68,6 +70,7 @@ public class DeviceModel {
         mX = iconX;
         mY = iconY;
         mWifiSSID = wifiSSID;
+        mWifiPass = wifipass;
     }
 
     public String getDeviceID() {

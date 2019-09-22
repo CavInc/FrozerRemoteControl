@@ -18,6 +18,7 @@ import tk.cavinc.frozerremotecontrol.R;
 
 public class WiFiSettingDialog extends DialogFragment{
     private static final String SSID = "SSID";
+    private static final String PASS = "PASS";
     private EditText mWifiSSID;
     private EditText mWiFiPass;
 
@@ -26,9 +27,10 @@ public class WiFiSettingDialog extends DialogFragment{
     private String ssid;
     private String pass;
 
-    public static WiFiSettingDialog newInstance(String wifissid){
+    public static WiFiSettingDialog newInstance(String wifissid,String pass){
         Bundle arg = new Bundle();
         arg.putString(SSID,wifissid);
+        arg.putString(PASS,pass);
         WiFiSettingDialog dialog = new WiFiSettingDialog();
         dialog.setArguments(arg);
         return dialog;
@@ -39,6 +41,7 @@ public class WiFiSettingDialog extends DialogFragment{
         super.onCreate(savedInstanceState);
         if (getArguments() != null){
             ssid = getArguments().getString(SSID);
+            pass = getArguments().getString(PASS);
         }
     }
 
@@ -51,6 +54,9 @@ public class WiFiSettingDialog extends DialogFragment{
 
         if (ssid != null) {
             mWifiSSID.setText(ssid);
+        }
+        if (pass != null) {
+            mWiFiPass.setText(pass);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

@@ -169,7 +169,8 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
             resetData();
         }
         if (view.getId() == R.id.control_wifi_data) {
-            WiFiSettingDialog dialog = WiFiSettingDialog.newInstance(currentModel.getWifiSSID());
+            WiFiSettingDialog dialog = WiFiSettingDialog.newInstance(currentModel.getWifiSSID(),
+                    currentModel.getWifiPass());
             dialog.setDialogListener(mDialogListener);
             dialog.show(getActivity().getFragmentManager(),"WSD");
         }
@@ -251,7 +252,7 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     // оправляем данные на форму
     private void sendDataControl(){
         new SendData(currentModel.getDeviceID()+POST_PAGE,mDataManager.getDeviceControl(),
-                currentModel.getWifiSSID()).execute();
+                currentModel.getWifiSSID(),currentModel.getWifiPass()).execute();
     }
 
     private class RequestData extends AsyncTask <Void,Void,String> {
@@ -300,11 +301,13 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         private DeviceControlModel mDeviceControlModel;
         private String mUrl;
         private String wifiSsid;
+        private String wifiPass;
 
-        public SendData(String urlId,DeviceControlModel controlModel,String wifissid){
+        public SendData(String urlId,DeviceControlModel controlModel,String wifissid,String pass){
             mUrl = urlId;
             mDeviceControlModel = controlModel;
             wifiSsid = wifissid;
+            wifiPass = pass;
         }
 
         @Override
@@ -313,7 +316,7 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
             request.RequestSendData(String.valueOf(mDeviceControlModel.getControlTemperature()),
                     String.valueOf(mDeviceControlModel.getHeater_time_on()),
                     String.valueOf(mDeviceControlModel.getHeater_time_off()),
-                    wifiSsid);
+                    wifiSsid,wifiPass);
             return null;
         }
 
@@ -350,7 +353,6 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
         public void run() {
             System.out.println("Старт");
             while (runFlag) {
-                System.out.println("Hello, World!");
                 Log.d(TAG, "GET DATA REQUEST");
                 currentModel = mDataManager.getCurrentDevice();
                 if (currentModel == null) {

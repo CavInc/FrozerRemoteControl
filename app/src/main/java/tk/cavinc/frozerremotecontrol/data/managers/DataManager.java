@@ -138,7 +138,12 @@ public class DataManager {
             itm.put("iconX",l.getX());
             itm.put("iconY",l.getY());
             itm.put("iconAngle",l.getDirection());
-            itm.put("wifissid",l.getWifiSSID());
+            if (l.getWifiSSID() != null) {
+                itm.put("wifissid", l.getWifiSSID());
+            }
+            if (l.getWifiPass() !=null) {
+                itm.put("wifipass",l.getWifiPass());
+            }
             if (l.getControl() != null) {
                 JSONObject control = new JSONObject();
                 control.put("controlTemperature",l.getControl().getControlTemperature());
@@ -212,6 +217,10 @@ public class DataManager {
                     if (lx.has("wifissid")) {
                         wifiSsid = lx.getString("wifissid");
                     }
+                    String wifipass = null;
+                    if (lx.has("wifipass")){
+                        wifipass = lx.getString("wifipass");
+                    }
 
                     if (lx.has("deviceControl")) {
                         JSONObject ct = (JSONObject) lx.get("deviceControl");
@@ -221,10 +230,10 @@ public class DataManager {
                         DeviceControlModel controlModel = new DeviceControlModel(0,cTemp,ho,hoff,0);
                         recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"),
                                 lx.getString("deviceName"),controlModel,iconId,iconX,iconY,inconAngle,
-                                wifiSsid));
+                                wifiSsid,wifipass));
                     } else {
                         recModel.add(new DeviceModel(lx.getInt("id"), lx.getString("deviceID"),
-                                lx.getString("deviceName"),iconId,iconX,iconY,wifiSsid));
+                                lx.getString("deviceName"),iconId,iconX,iconY,wifiSsid,wifipass));
                     }
                 }
                 if (recModel.size() != 0 ){

@@ -90,7 +90,7 @@ public class Request {
     }
 
     // запрос на устройство
-    public void RequestSendData(String currentTemp,String hton,String htoff,String wifiSSID){
+    public void RequestSendData(String currentTemp,String hton,String htoff,String wifiSSID,String wifiPass){
         try {
             URL url = new URL(mUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -111,6 +111,10 @@ public class Request {
             if (wifiSSID != null) {
                 tokenUri.append("&ssid=");
                 tokenUri.append(URLEncoder.encode(wifiSSID,"UTF-8"));
+            }
+            if (wifiPass != null) {
+                tokenUri.append("&password=");
+                tokenUri.append(URLEncoder.encode(wifiPass,"UTF-8"));
             }
 
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
