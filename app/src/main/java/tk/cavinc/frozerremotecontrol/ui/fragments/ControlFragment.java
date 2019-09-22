@@ -169,10 +169,19 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
             resetData();
         }
         if (view.getId() == R.id.control_wifi_data) {
-            WiFiSettingDialog dialog = new WiFiSettingDialog();
+            WiFiSettingDialog dialog = WiFiSettingDialog.newInstance(currentModel.getWifiSSID());
+            dialog.setDialogListener(mDialogListener);
             dialog.show(getActivity().getFragmentManager(),"WSD");
         }
     }
+
+    WiFiSettingDialog.WifiSettingDialogListener mDialogListener = new WiFiSettingDialog.WifiSettingDialogListener() {
+        @Override
+        public void onChange(String wifi_ssid, String pass) {
+            currentModel.setWifiSSID(wifi_ssid);
+            currentModel.setWifiPass(pass);
+        }
+    };
 
     private void resetData() {
         DeviceControlModel controlModel = mDataManager.getDeviceControl();
@@ -241,7 +250,8 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
 
     // оправляем данные на форму
     private void sendDataControl(){
-        new SendData(currentModel.getDeviceID()+POST_PAGE,mDataManager.getDeviceControl()).execute();
+        new SendData(currentModel.getDeviceID()+POST_PAGE,mDataManager.getDeviceControl(),
+                currentModel.getWifiSSID()).execute();
     }
 
     private class RequestData extends AsyncTask <Void,Void,String> {
@@ -289,10 +299,12 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
     private class SendData extends AsyncTask<Void,Void,String> {
         private DeviceControlModel mDeviceControlModel;
         private String mUrl;
+        private String wifiSsid;
 
-        public SendData(String urlId,DeviceControlModel controlModel){
+        public SendData(String urlId,DeviceControlModel controlModel,String wifissid){
             mUrl = urlId;
             mDeviceControlModel = controlModel;
+            wifiSsid = wifissid;
         }
 
         @Override
@@ -300,7 +312,8 @@ public class ControlFragment extends Fragment implements View.OnClickListener {
             Request request = new Request(mUrl);
             request.RequestSendData(String.valueOf(mDeviceControlModel.getControlTemperature()),
                     String.valueOf(mDeviceControlModel.getHeater_time_on()),
-                    String.valueOf(mDeviceControlModel.getHeater_time_off()));
+                    String.valueOf(mDeviceControlModel.getHeater_time_off()),
+                    wifiSsid);
             return null;
         }
 

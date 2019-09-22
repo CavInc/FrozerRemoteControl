@@ -15,6 +15,7 @@ public class DeviceModel {
     private int mY = 0;
     private boolean mVisible = false; // перенесено ли на схему
     private String mWifiSSID; // название точки
+    private String mWifiPass; // пароль точки
 
 
 
@@ -47,7 +48,7 @@ public class DeviceModel {
     }
 
     public DeviceModel(int id, String deviceID, String deviceName, DeviceControlModel controlModel,
-                       int iconId, int iconX, int iconY,int iconAngle) {
+                       int iconId, int iconX, int iconY,int iconAngle,String wifiSSID) {
         mId = id;
         mDeviceID = deviceID;
         mDeviceName = deviceName;
@@ -56,15 +57,17 @@ public class DeviceModel {
         mX = iconX;
         mY = iconY;
         mDirection = iconAngle;
+        mWifiSSID = wifiSSID;
     }
 
-    public DeviceModel(int id, String deviceID, String deviceName, int iconId, int iconX, int iconY) {
+    public DeviceModel(int id, String deviceID, String deviceName, int iconId, int iconX, int iconY,String wifiSSID) {
         mId = id;
         mDeviceID = deviceID;
         mDeviceName = deviceName;
         mGraphId = iconId;
         mX = iconX;
         mY = iconY;
+        mWifiSSID = wifiSSID;
     }
 
     public String getDeviceID() {
@@ -141,6 +144,18 @@ public class DeviceModel {
 
     public String getWifiSSID() {
         return mWifiSSID;
+    }
+
+    public void setWifiSSID(String wifiSSID) {
+        mWifiSSID = wifiSSID;
+    }
+
+    public String getWifiPass() {
+        return mWifiPass;
+    }
+
+    public void setWifiPass(String wifiPass) {
+        mWifiPass = wifiPass;
     }
 
     @Override

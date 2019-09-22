@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,30 @@ import tk.cavinc.frozerremotecontrol.R;
  */
 
 public class WiFiSettingDialog extends DialogFragment{
+    private static final String SSID = "SSID";
     private EditText mWifiSSID;
     private EditText mWiFiPass;
 
     private WifiSettingDialogListener mDialogListener;
+
+    private String ssid;
+    private String pass;
+
+    public static WiFiSettingDialog newInstance(String wifissid){
+        Bundle arg = new Bundle();
+        arg.putString(SSID,wifissid);
+        WiFiSettingDialog dialog = new WiFiSettingDialog();
+        dialog.setArguments(arg);
+        return dialog;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null){
+            ssid = getArguments().getString(SSID);
+        }
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -27,6 +48,10 @@ public class WiFiSettingDialog extends DialogFragment{
 
         mWifiSSID = v.findViewById(R.id.wifi_ssid_dialog);
         mWiFiPass = v.findViewById(R.id.wifi_pass);
+
+        if (ssid != null) {
+            mWifiSSID.setText(ssid);
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Настройки WiFi")

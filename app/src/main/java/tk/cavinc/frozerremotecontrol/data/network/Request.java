@@ -90,7 +90,7 @@ public class Request {
     }
 
     // запрос на устройство
-    public void RequestSendData(String currentTemp,String hton,String htoff){
+    public void RequestSendData(String currentTemp,String hton,String htoff,String wifiSSID){
         try {
             URL url = new URL(mUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -108,6 +108,10 @@ public class Request {
             tokenUri.append(URLEncoder.encode(htoff,"UTF-8"));
             tokenUri.append("&control_temperature=");
             tokenUri.append(URLEncoder.encode(currentTemp,"UTF-8"));
+            if (wifiSSID != null) {
+                tokenUri.append("&ssid=");
+                tokenUri.append(URLEncoder.encode(wifiSSID,"UTF-8"));
+            }
 
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
             outputStreamWriter.write(tokenUri.toString());
