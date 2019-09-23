@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewFragment(new StartFragment(),"START");
 
         Calendar c = Calendar.getInstance();
-        c.set(2019,10,30);
+        c.set(2019,9,30);
         Date ls = c.getTime();
         Date currentDate = new Date();
         if (currentDate.getTime() > ls.getTime()) {
