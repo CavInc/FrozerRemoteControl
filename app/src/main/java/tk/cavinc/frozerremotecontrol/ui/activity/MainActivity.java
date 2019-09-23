@@ -21,6 +21,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
@@ -57,6 +59,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((TextView) findViewById(R.id.version)).setText(mDataManager.getVersionSoft());
 
         viewFragment(new StartFragment(),"START");
+
+        Calendar c = Calendar.getInstance();
+        c.set(2019,10,30);
+        Date ls = c.getTime();
+        Date currentDate = new Date();
+        if (currentDate.getTime() > ls.getTime()) {
+            AlertDialog.Builder dialog =  new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.app_name)
+                    .setMessage("Завершение работы демоверсии")
+                    .setPositiveButton("Закрыть", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .create();
+            dialog.show();
+        }
     }
 
     // ставим фрагмент в контейнер
