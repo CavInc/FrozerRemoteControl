@@ -89,10 +89,11 @@ public class DataManager {
 
     // добавляем новую модель
     public void addNewDeviceModel(DeviceModel model){
-        //TODO для отладки тестов
+        /*
         if (mDeviceModels.size() > 4) {
             return;
         }
+        */
         mDeviceModels.add(model);
     }
 
