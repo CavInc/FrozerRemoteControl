@@ -20,4 +20,15 @@
     <color name="app_ligth_blue_dark">#01579B</color>
     <color name="app_ligth_blue">#039BE5</color>
     <color name="app_lgith_blue_ligth">#4FC3F7</color>
+
+    <color name="x1">#2075D3</color>
+    <color name="x2">#F7FBFF</color>
+    <color name="x3">#A8A4A4</color>
+    <color name="x4">#BCDBFF</color>
+    <color name="x5">#979797</color>
+    <color name="x6">#EFEFEF</color>
+    <color name="x7">#C2BFBF</color>
+    <color name="app_black">#000000</color>
+    <color name="app_wihte">#FFFFFF</color>
+
 </resources>
