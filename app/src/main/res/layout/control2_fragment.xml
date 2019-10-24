@@ -25,23 +25,36 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingRight="8dp"
+        android:paddingTop="16dp"
         android:paddingLeft="8dp"
-        android:paddingTop="24dp"
+        android:paddingRight="8dp"
         android:background="@drawable/layout_bg">
         <TextView
-            android:text="Схема >"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"
+            android:text="Управление"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/device_lv"
-            android:layout_below="@id/device_list_bt"
+
+        <Button
+            android:text="Принять"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="Настройка данных WIFI"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="Разморозка"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="Быстрая разморозка"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="Сброс"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </LinearLayout>

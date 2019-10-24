@@ -22,6 +22,7 @@ public class Start2Fragment extends Fragment implements View.OnClickListener{
         View rootView = inflater.inflate(R.layout.activity_main2, container, false);
 
         rootView.findViewById(R.id.input_qr_code).setOnClickListener(this);
+        rootView.findViewById(R.id.button_id).setOnClickListener(this);
 
         return rootView;
     }
@@ -32,7 +33,7 @@ public class Start2Fragment extends Fragment implements View.OnClickListener{
             ((MainActivity2) getActivity()).viewFragment(new ScannedQRCodeFragment(),"QRCANNER");
         }
         if (view.getId() == R.id.button_id) {
-
+            ((MainActivity2) getActivity()).viewFragment(new Control2Fragment(),"CONTROL");
         }
     }
 }
