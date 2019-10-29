@@ -7,8 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import tk.cavinc.frozerremotecontrol.R;
+import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
+import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity2;
 
 /**
@@ -16,6 +19,15 @@ import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity2;
  */
 
 public class Start2Fragment extends Fragment implements View.OnClickListener{
+    private DataManager mDataManager;
+    private EditText mDeviceID;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDataManager = DataManager.getInstance();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -23,6 +35,8 @@ public class Start2Fragment extends Fragment implements View.OnClickListener{
 
         rootView.findViewById(R.id.input_qr_code).setOnClickListener(this);
         rootView.findViewById(R.id.button_id).setOnClickListener(this);
+
+        mDeviceID = rootView.findViewById(R.id.input_id);
 
         return rootView;
     }
@@ -33,6 +47,9 @@ public class Start2Fragment extends Fragment implements View.OnClickListener{
             ((MainActivity2) getActivity()).viewFragment(new ScannedQRCodeFragment(),"QRCANNER");
         }
         if (view.getId() == R.id.button_id) {
+            if (mDeviceID.getText().length() != 0){
+                mDataManager.setCurrentDevice(new DeviceModel(-1,mDeviceID.getText().toString(),"Новое"));
+            }
             ((MainActivity2) getActivity()).viewFragment(new Control2Fragment(),"CONTROL");
         }
     }

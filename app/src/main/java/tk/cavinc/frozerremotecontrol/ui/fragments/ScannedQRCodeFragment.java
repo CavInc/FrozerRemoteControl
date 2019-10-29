@@ -16,6 +16,9 @@ import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import java.util.List;
 
 import tk.cavinc.frozerremotecontrol.R;
+import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
+import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
+import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity2;
 
 /**
  * Created by cav on 24.10.19.
@@ -23,6 +26,13 @@ import tk.cavinc.frozerremotecontrol.R;
 
 public class ScannedQRCodeFragment extends Fragment {
     private CompoundBarcodeView mBarcodeView;
+    private DataManager mDataManager;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDataManager = DataManager.getInstance();
+    }
 
     @Nullable
     @Override
@@ -64,6 +74,8 @@ public class ScannedQRCodeFragment extends Fragment {
                 // лочим ввод
                 releaceCamera();
                 //mIdDevice.setText(res);
+                mDataManager.setCurrentDevice(new DeviceModel(-1,res,"Новое"));
+                ((MainActivity2) getActivity()).viewFragment(new Control2Fragment(),"CONTROL");
             }
         }
 

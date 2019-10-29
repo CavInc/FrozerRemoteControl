@@ -39,6 +39,7 @@
 
         <LinearLayout
             android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
@@ -84,6 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:id="@+id/control_hoff"
                         tools:text="1"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -96,10 +98,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <ImageView
+                            android:id="@+id/control_hoff_up"
                             android:src="@drawable/ic_expand_less_black_24dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <ImageView
+                            android:id="@+id/control_hoff_down"
                             android:src="@drawable/ic_expand_more_black_24dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -107,10 +111,12 @@
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <TextView
                         tools:text="6"
+                        android:id="@+id/control_l1"
                         android:layout_marginTop="8dp"
                         android:textSize="20sp"
                         android:layout_marginRight="8dp"
@@ -122,10 +128,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <ImageView
+                            android:id="@+id/control_hon_up"
                             android:src="@drawable/ic_expand_less_black_24dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <ImageView
+                            android:id="@+id/control_hon_down"
                             android:src="@drawable/ic_expand_more_black_24dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
