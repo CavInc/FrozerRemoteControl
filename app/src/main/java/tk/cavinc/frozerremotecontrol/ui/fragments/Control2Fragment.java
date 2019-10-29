@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
@@ -17,6 +19,12 @@ import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity2;
  */
 
 public class Control2Fragment extends Fragment implements View.OnClickListener {
+    private View mNameControl;
+    private View mComantControl;
+    private boolean nameVisible = false;
+    private ImageView mNameIndicator;
+    private EditText mDeviceName;
+
 
     @Nullable
     @Override
@@ -25,6 +33,12 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
 
         rootView.findViewById(R.id.control_setting_wifi).setOnClickListener(this);
         rootView.findViewById(R.id.list_devices_bt).setOnClickListener(this);
+        rootView.findViewById(R.id.control_add_device).setOnClickListener(this);
+        rootView.findViewById(R.id.control_store_device).setOnClickListener(this);
+
+        mNameControl = rootView.findViewById(R.id.control_name_panel_lv);
+        mComantControl = rootView.findViewById(R.id.control_speed_panel);
+        mNameIndicator = rootView.findViewById(R.id.control_name_indicator);
 
         return rootView;
     }
@@ -38,7 +52,31 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
             case R.id.list_devices_bt:
                 ((MainActivity2) getActivity()).viewFragment(new DeviceList2Fragment(),"DEVICELIST");
                 break;
+            case R.id.control_add_device:
+                nameVisible = !nameVisible;
+                changeVisibleAddDevice(nameVisible);
+                break;
+            case R.id.control_store_device:
+                storeDevice();
+                break;
         }
 
+    }
+
+    private void changeVisibleAddDevice(boolean flag) {
+        if (flag) {
+            mComantControl.setVisibility(View.GONE);
+            mNameControl.setVisibility(View.VISIBLE);
+            mNameIndicator.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_expand_more_black_24dp));
+        } else {
+            mNameControl.setVisibility(View.GONE);
+            mComantControl.setVisibility(View.VISIBLE);
+            mNameIndicator.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_chevron_right_black_24dp));
+        }
+    }
+
+    private void storeDevice(){
+        nameVisible = false;
+        changeVisibleAddDevice(nameVisible);
     }
 }

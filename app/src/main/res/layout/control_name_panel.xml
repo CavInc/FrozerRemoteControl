@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/control_name_panel_lv"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:visibility="gone"
+    android:paddingLeft="16dp"
+    android:layout_height="match_parent">
+    <android.support.design.widget.TextInputLayout
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/control_device_name"
+            android:hint="Имя "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+    <Button
+        android:text="Вид"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/control_store_device"
+        android:text="Сохранить"
+        android:background="@drawable/button_blue_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
