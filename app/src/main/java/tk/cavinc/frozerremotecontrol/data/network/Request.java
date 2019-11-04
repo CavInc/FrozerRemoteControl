@@ -1,5 +1,7 @@
 package tk.cavinc.frozerremotecontrol.data.network;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,6 +18,8 @@ import java.util.Date;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceControlModel;
 import tk.cavinc.frozerremotecontrol.data.models.RequestReturnModel;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by cav on 19.07.19.
@@ -47,6 +51,7 @@ public class Request {
     // запрос данных с страницы
     public RequestReturnModel getPageData(){
         RequestReturnModel requestRes = null;
+        Log.d(TAG,mUrl);
         try {
             URL url = new URL(mUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

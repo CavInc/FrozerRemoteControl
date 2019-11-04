@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
+import tk.cavinc.frozerremotecontrol.ui.fragments.Control2Fragment;
 import tk.cavinc.frozerremotecontrol.ui.fragments.Start2Fragment;
 
 /**
@@ -81,6 +82,9 @@ public class MainActivity2 extends AppCompatActivity {
         if (!f.getTag().equals("START")){
             viewFragment(new Start2Fragment(),"START");
             return;
+        }
+        if (f.getTag().equals("STOREOK")){
+            viewFragment(new Control2Fragment(),"CONTROL");
         }
         super.onBackPressed();
     }

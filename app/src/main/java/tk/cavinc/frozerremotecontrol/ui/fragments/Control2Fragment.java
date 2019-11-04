@@ -92,6 +92,10 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.control_hoff_up).setOnClickListener(this);
         rootView.findViewById(R.id.control_hoff_down).setOnClickListener(this);
 
+        rootView.findViewById(R.id.control_over_frozen).setOnClickListener(this); // быстрая разморозка
+        rootView.findViewById(R.id.controls_speed_frozen).setOnClickListener(this); // быстрая заморозка
+        rootView.findViewById(R.id.control_reset).setOnClickListener(this);
+
         rootView.findViewById(R.id.control_send_change).setOnClickListener(this);
 
         return rootView;
@@ -105,6 +109,8 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
             runFlag = true;
             refreshParam.start();
         }
+
+        mDeviceName.setText(currentModel.getDeviceName());
 
     }
 
@@ -273,10 +279,14 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
             } else {
                 currentModel.setId(lastID + 1);
             }
+            mDataManager.addNewDeviceModel(currentModel);
+        } else {
+            int pos = mDataManager.getDeviceModels().indexOf(currentModel);
+            mDataManager.updateDeviceModels(pos,currentModel);
         }
         //model.setControl(mDataManager.getDeviceControl());
         //model.setGraphId(iconId);
-        mDataManager.addNewDeviceModel(currentModel);
+
         try {
             mDataManager.storeDevice();
         } catch (JSONException e) {
@@ -284,6 +294,7 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         }
         nameVisible = false;
         changeVisibleAddDevice(nameVisible);
+        ((MainActivity2) getActivity()).viewFragment(new StoreOkFragment(),"STOREOK");
     }
 
     @Override
@@ -305,7 +316,7 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         public void run() {
             System.out.println("Старт");
             while (runFlag) {
-                Log.d(TAG, "GET DATA REQUEST");
+                Log.d(TAG, "GET DATA REQUEST :");
                 currentModel = mDataManager.getCurrentDevice();
                 if (currentModel == null) {
                     continue;
@@ -314,6 +325,7 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
                     mDataManager.setDeviceControl(currentModel.getControl());
                 }
                 if (getActivity() != null) {
+                    Log.d(TAG,"URL :"+currentModel.getDeviceID());
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -363,7 +375,7 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
                             .setNegativeButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    ((MainActivity) getActivity()).viewFragment(new StartFragment(),"START");
+                                    ((MainActivity2) getActivity()).viewFragment(new Start2Fragment(),"START");
                                 }
                             });
                     builder.show();
