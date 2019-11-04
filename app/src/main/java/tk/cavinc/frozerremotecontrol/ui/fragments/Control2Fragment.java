@@ -1,9 +1,13 @@
 package tk.cavinc.frozerremotecontrol.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +17,19 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.util.concurrent.TimeUnit;
+
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceControlModel;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
+import tk.cavinc.frozerremotecontrol.data.models.RequestReturnModel;
+import tk.cavinc.frozerremotecontrol.data.network.Request;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity2;
+import tk.cavinc.frozerremotecontrol.utils.ParseData;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by cav on 24.10.19.
@@ -39,6 +50,12 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
     private TextView mHeaterTimeOn;
     private TextView mHeaterTimeOff;
 
+    private TextView mTemperature;
+    private TextView mControlTemperature;
+    private TextView mRemControlTemperature;
+
+    private boolean runFlag = true;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +72,17 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.control_add_device).setOnClickListener(this);
         rootView.findViewById(R.id.control_store_device).setOnClickListener(this);
 
+        rootView.findViewById(R.id.control_temp_up).setOnClickListener(this);
+        rootView.findViewById(R.id.control_temp_down).setOnClickListener(this);
+
         mNameControl = rootView.findViewById(R.id.control_name_panel_lv);
         mComantControl = rootView.findViewById(R.id.control_speed_panel);
         mNameIndicator = rootView.findViewById(R.id.control_name_indicator);
         mDeviceName = rootView.findViewById(R.id.control_device_name);
+
+        mTemperature = rootView.findViewById(R.id.temperature);
+        mRemControlTemperature = rootView.findViewById(R.id.rem_control_temperature);
+        mControlTemperature = rootView.findViewById(R.id.control_temperature);
 
         mHeaterTimeOn = rootView.findViewById(R.id.control_l1);
         rootView.findViewById(R.id.control_hon_up).setOnClickListener(this);
@@ -68,6 +92,8 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.control_hoff_up).setOnClickListener(this);
         rootView.findViewById(R.id.control_hoff_down).setOnClickListener(this);
 
+        rootView.findViewById(R.id.control_send_change).setOnClickListener(this);
+
         return rootView;
     }
 
@@ -75,7 +101,32 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         currentModel = mDataManager.getCurrentDevice();
+        if (!refreshParam.isAlive()) {
+            runFlag = true;
+            refreshParam.start();
+        }
 
+    }
+
+    @Override
+    public void onPause() {
+        if (refreshParam.isAlive()) {
+            // refreshParam.stop();
+            runFlag = false;
+        }
+        refreshParam.interrupt();
+        super.onPause();
+    }
+
+    @Override
+    public void onDetach() {
+        if (refreshParam.isAlive()) {
+            //refreshParam.stop();
+            runFlag = false;
+        }
+        refreshParam.interrupt();
+        //setSubTitle("");
+        super.onDetach();
     }
 
     @Override
@@ -106,10 +157,36 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
             case R.id.control_hon_down:
                 changeHeaterTimeOn(-1);
                 break;
+            case  R.id.control_temp_up:
+                changeTemp(1);
+                break;
+            case R.id.control_temp_down:
+                changeTemp(-1);
+                break;
+            case R.id.control_send_change:
+                sendDataControl();
+                updateUI();
+                break;
+            case R.id.control_reset:
+                resetData();
+                break;
+            case R.id.controls_speed_frozen:
+                setSpeedFrozen();
+                break;
+            case R.id.control_over_frozen:
+                setOverFrozen();
+                break;
         }
 
     }
 
+    // изменить температуру
+    private void changeTemp(int direct){
+        DeviceControlModel control = mDataManager.getDeviceControl();
+        control.setControlTemperature(control.getControlTemperature() + direct);
+        mDataManager.setDeviceControl(control);
+        updateUI();
+    }
 
     private void changeHeaterTimeOff(int direct) {
         DeviceControlModel controlModel = mDataManager.getDeviceControl();
@@ -127,12 +204,47 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         updateUI();
     }
 
+    private void resetData() {
+        DeviceControlModel controlModel = mDataManager.getDeviceControl();
+        controlModel.setHeater_time_off(0);
+        controlModel.setHeater_time_on(0);
+        controlModel.setControlTemperature(0);
+        mDataManager.setDeviceControl(controlModel);
+        updateUI();
+    }
+
+    private void setSpeedFrozen() {
+        DeviceControlModel controlModel = mDataManager.getDeviceControl();
+        controlModel.setControlTemperature(-40);
+        controlModel.setHeater_time_off(0);
+        controlModel.setHeater_time_on(0);
+        mDataManager.setDeviceControl(controlModel);
+        sendDataControl();
+        updateUI();
+    }
+
+    private void setOverFrozen() {
+        DeviceControlModel controlModel = mDataManager.getDeviceControl();
+        controlModel.setControlTemperature(+60);
+        controlModel.setHeater_time_on(0);
+        controlModel.setHeater_time_off(0);
+        mDataManager.setDeviceControl(controlModel);
+        sendDataControl();
+        updateUI();
+    }
+
+    // оправляем данные на форму
+    private void sendDataControl(){
+        new Control2Fragment.SendData(currentModel.getDeviceID()+POST_PAGE,mDataManager.getDeviceControl(),
+                currentModel.getWifiSSID(),currentModel.getWifiPass()).execute();
+    }
+
     private void updateUI() {
-        /*
+
         mTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getTemperature()));
         mRemControlTemperature.setText("("+String.valueOf(mDataManager.getDeviceControl().getRemoteControlTemperature())+")");
         mControlTemperature.setText(String.valueOf(mDataManager.getDeviceControl().getControlTemperature()));
-        */
+
         mHeaterTimeOn.setText(String.valueOf(mDataManager.getDeviceControl().getRemote_heater_time_on())+" / "+
                 String.valueOf(mDataManager.getDeviceControl().getHeater_time_on()));
         mHeaterTimeOff.setText(mDataManager.getDeviceControl().getRemote_heater_time_off()+" / "+
@@ -173,4 +285,122 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         nameVisible = false;
         changeVisibleAddDevice(nameVisible);
     }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG,"DESTROY CONTROL");
+
+        DeviceModel model = mDataManager.getCurrentDevice();
+        int pos = mDataManager.getDeviceModels().indexOf(model);
+        model.setControl(mDataManager.getDeviceControl());
+        if (pos != -1) {
+            mDataManager.updateDeviceModels(pos,model);
+        }
+
+        super.onDestroy();
+    }
+
+    Thread refreshParam = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            System.out.println("Старт");
+            while (runFlag) {
+                Log.d(TAG, "GET DATA REQUEST");
+                currentModel = mDataManager.getCurrentDevice();
+                if (currentModel == null) {
+                    continue;
+                }
+                if (currentModel.getControl() != null ) {
+                    mDataManager.setDeviceControl(currentModel.getControl());
+                }
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Control2Fragment.RequestData(currentModel.getDeviceID()).execute();
+                        }
+                    });
+                }
+                try {
+                    TimeUnit.SECONDS.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    },"REFRESH TEMPERATURE DATA");
+
+
+    private class RequestData extends AsyncTask<Void,Void,String> {
+        private String urlId;
+        private RequestReturnModel res;
+
+        public RequestData (String urlId){
+            this.urlId = urlId;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            Request request = new Request(urlId);
+            res  = request.getPageData();
+            if (!res.isStatus()) {
+                return res.getRes();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s == null) {
+                new ParseData().parse(res.getRes());
+                updateUI();
+            } else {
+                if (getActivity() != null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Внимание !!")
+                            .setMessage(res.getRes())
+                            .setNegativeButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    ((MainActivity) getActivity()).viewFragment(new StartFragment(),"START");
+                                }
+                            });
+                    builder.show();
+                }
+            }
+        }
+    }
+
+    // передача данных
+    private class SendData extends AsyncTask<Void,Void,String> {
+        private DeviceControlModel mDeviceControlModel;
+        private String mUrl;
+        private String wifiSsid;
+        private String wifiPass;
+
+        public SendData(String urlId,DeviceControlModel controlModel,String wifissid,String pass){
+            mUrl = urlId;
+            mDeviceControlModel = controlModel;
+            wifiSsid = wifissid;
+            wifiPass = pass;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            Request request = new Request(mUrl);
+            request.RequestSendData(String.valueOf(mDeviceControlModel.getControlTemperature()),
+                    String.valueOf(mDeviceControlModel.getHeater_time_on()),
+                    String.valueOf(mDeviceControlModel.getHeater_time_off()),
+                    wifiSsid,wifiPass);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+        }
+    }
+
 }

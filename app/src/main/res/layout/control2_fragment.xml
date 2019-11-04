@@ -48,31 +48,59 @@
                 android:layout_marginRight="32dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/temperature"
+                        android:layout_weight="1"
+                        tools:text="-12.34"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:textSize="30sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/rem_control_temperature"
+                        android:layout_weight="1"
+                        tools:text="(34.00)"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:textSize="22sp"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
                 <TextView
+                    android:id="@+id/control_temperature"
                     tools:text="-12C"
                     android:textStyle="bold"
-                    android:textSize="28sp"
+                    android:textSize="30sp"
                     android:layout_marginTop="6dp"
                     android:gravity="right"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <LinearLayout
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:src="@drawable/ic_expand_less_black_24dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <ImageView
-                            android:src="@drawable/ic_expand_more_black_24dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/control_temp_up"
+                        android:src="@drawable/ic_expand_less_black_24dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp" />
+                    <ImageView
+                        android:id="@+id/control_temp_down"
+                        android:src="@drawable/ic_expand_more_black_24dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -144,6 +172,7 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/control_send_change"
             android:text="Принять"
             android:background="@drawable/button_blue_bg"
             android:layout_marginBottom="16dp"
