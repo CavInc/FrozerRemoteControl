@@ -97,6 +97,7 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.control_reset).setOnClickListener(this);
 
         rootView.findViewById(R.id.control_send_change).setOnClickListener(this);
+        rootView.findViewById(R.id.select_icon_bt).setOnClickListener(this);
 
         return rootView;
     }
@@ -182,6 +183,9 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
             case R.id.control_over_frozen:
                 setOverFrozen();
                 break;
+            case R.id.select_icon_bt:
+                setIcon();
+                break;
         }
 
     }
@@ -237,6 +241,11 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         mDataManager.setDeviceControl(controlModel);
         sendDataControl();
         updateUI();
+    }
+
+    // устанавливаем иконку приложения
+    private void setIcon(){
+        ((MainActivity2) getActivity()).viewFragment(new SelectDeviceIconFragment(),"SELECTICON");
     }
 
     // оправляем данные на форму

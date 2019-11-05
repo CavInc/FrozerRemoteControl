@@ -16,6 +16,7 @@
             android:layout_height="wrap_content" />
     </android.support.design.widget.TextInputLayout>
     <Button
+        android:id="@+id/select_icon_bt"
         android:text="Вид"
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_blue_bg"

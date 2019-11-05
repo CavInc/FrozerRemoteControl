@@ -86,6 +86,9 @@ public class MainActivity2 extends AppCompatActivity {
         if (f.getTag().equals("STOREOK")){
             viewFragment(new Control2Fragment(),"CONTROL");
         }
+        if (f.getTag().equals("SELECTICON")){
+            viewFragment(new Control2Fragment(),"CONTROL");
+        }
         super.onBackPressed();
     }
 
