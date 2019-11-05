@@ -99,6 +99,8 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.control_send_change).setOnClickListener(this);
         rootView.findViewById(R.id.select_icon_bt).setOnClickListener(this);
 
+        rootView.findViewById(R.id.get_home).setOnClickListener(this);
+
         return rootView;
     }
 
@@ -144,6 +146,9 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.list_devices_bt:
                 ((MainActivity2) getActivity()).viewFragment(new DeviceList2Fragment(),"DEVICELIST");
+                break;
+            case R.id.get_home:
+                ((MainActivity2) getActivity()).viewFragment(new Start2Fragment(),"START");
                 break;
             case R.id.control_add_device:
                 nameVisible = !nameVisible;

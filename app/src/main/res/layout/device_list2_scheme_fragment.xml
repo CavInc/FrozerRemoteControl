@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/main_bg">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/main_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -29,21 +31,23 @@
         android:paddingRight="8dp"
         android:paddingLeft="8dp"
         android:paddingTop="24dp"
+        android:paddingBottom="8dp"
         android:background="@drawable/layout_bg">
         <TextView
             android:id="@+id/get_scheme"
-            android:text="Схема >"
+            android:text="Список >"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/device_lv"
-            android:layout_below="@id/device_list_bt"
+        <FrameLayout
+            android:id="@+id/device_schema_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
+
+        </FrameLayout>
+
     </LinearLayout>
 
 </LinearLayout>

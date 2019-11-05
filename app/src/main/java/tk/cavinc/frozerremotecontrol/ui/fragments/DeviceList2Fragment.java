@@ -26,7 +26,7 @@ import tk.cavinc.frozerremotecontrol.ui.helper.SimpleItemTouchHelperCallback;
  * Created by cav on 24.10.19.
  */
 
-public class DeviceList2Fragment extends Fragment {
+public class DeviceList2Fragment extends Fragment implements View.OnClickListener{
     private DataManager mDataManager;
 
     private RecyclerView mListView;
@@ -47,6 +47,8 @@ public class DeviceList2Fragment extends Fragment {
 
         mListView = rootView.findViewById(R.id.device_lv);
         mListView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        rootView.findViewById(R.id.get_scheme).setOnClickListener(this);
 
         return rootView;
     }
@@ -89,4 +91,11 @@ public class DeviceList2Fragment extends Fragment {
 
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.get_scheme) {
+            ((MainActivity2) getActivity()).viewFragment(new DeviceList2SchemeFragment(),"DEVICESHEME");
+        }
+    }
 }

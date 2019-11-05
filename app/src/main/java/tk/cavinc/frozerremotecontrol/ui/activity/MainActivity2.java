@@ -79,15 +79,17 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.container);
-        if (!f.getTag().equals("START")){
-            viewFragment(new Start2Fragment(),"START");
-            return;
-        }
         if (f.getTag().equals("STOREOK")){
             viewFragment(new Control2Fragment(),"CONTROL");
+            return;
         }
         if (f.getTag().equals("SELECTICON")){
             viewFragment(new Control2Fragment(),"CONTROL");
+            return;
+        }
+        if (!f.getTag().equals("START")){
+            viewFragment(new Start2Fragment(),"START");
+            return;
         }
         super.onBackPressed();
     }
