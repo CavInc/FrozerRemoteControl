@@ -1,6 +1,7 @@
 package tk.cavinc.frozerremotecontrol.ui.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -10,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +19,8 @@ import android.view.WindowManager;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
@@ -50,6 +54,24 @@ public class MainActivity2 extends AppCompatActivity {
         mDataManager.loadDevice();
 
         viewFragment(new Start2Fragment(),"START");
+
+        Calendar c = Calendar.getInstance();
+        c.set(2019,11,30);
+        Date ls = c.getTime();
+        Date currentDate = new Date();
+        if (currentDate.getTime() > ls.getTime()) {
+            AlertDialog.Builder dialog =  new AlertDialog.Builder(this);
+            dialog.setTitle(R.string.app_name)
+                    .setMessage("Завершение работы демоверсии")
+                    .setPositiveButton("Закрыть", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .create();
+            dialog.show();
+        }
     }
 
     // ставим фрагмент в контейнер

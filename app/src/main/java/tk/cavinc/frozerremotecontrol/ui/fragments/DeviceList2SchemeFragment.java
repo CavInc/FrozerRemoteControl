@@ -68,6 +68,8 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
         mDone = rootView.findViewById(R.id.scheme_done);
         mDone.setOnClickListener(this);
 
+        rootView.findViewById(R.id.get_scheme).setOnClickListener(this);
+
         return rootView;
     }
 
@@ -94,7 +96,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
                 Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.f1);
                 bitmap1 = RotateBitmap(bitmap1,rotate);
                 img.setImageBitmap(bitmap1);
-                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(60, 60);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(70, 70);
                 params.leftMargin = x;
                 params.topMargin = y;
                 img.setLayoutParams(params);
@@ -146,6 +148,9 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
             modeEdit = false;
             mEdit.setEnabled(true);
             mDone.setEnabled(false);
+        }
+        if (v.getId() == R.id.get_scheme) {
+            ((MainActivity2) getActivity()).viewFragment(new DeviceList2Fragment(),"DEVICELIST");
         }
     }
 
