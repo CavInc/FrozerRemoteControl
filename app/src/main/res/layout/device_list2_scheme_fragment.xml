@@ -41,6 +41,22 @@
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/scheme_done"
+                android:src="@drawable/checkbox_multiple_marked_outline"
+                android:layout_marginRight="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+            <ImageView
+                android:id="@+id/scheme_edit"
+                android:src="@drawable/hand_left"
+                android:layout_width="32dp"
+                android:layout_height="32dp"/>
+        </LinearLayout>
         <FrameLayout
             android:id="@+id/device_schema_map"
             android:layout_width="match_parent"

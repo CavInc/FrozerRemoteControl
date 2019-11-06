@@ -1,6 +1,7 @@
 package tk.cavinc.frozerremotecontrol.ui.fragments;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.CorrectCoordinate;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
+import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity2;
 
 import static android.content.ContentValues.TAG;
 import static java.lang.Math.abs;
@@ -38,6 +40,9 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
     private boolean modeEdit = false;
 
     private GestureDetector mDetector;
+
+    private ImageView mDone;
+    private ImageView mEdit;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +61,12 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
         mDetector = new GestureDetector(getActivity(),mGestureListener);
 
         mFrameLayout.setOnTouchListener(mFrameLayoutTouchListener);
+
+        mEdit = rootView.findViewById(R.id.scheme_edit);
+        mEdit.setOnClickListener(this);
+
+        mDone = rootView.findViewById(R.id.scheme_done);
+        mDone.setOnClickListener(this);
 
         return rootView;
     }
@@ -76,10 +87,66 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
 
     }
 
+    private ImageView setImageView(int x,int y,int rotate,int type,int id){
+        ImageView img = new ImageView(getActivity());
+        switch (type) {
+            case 1:
+                Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.f1);
+                bitmap1 = RotateBitmap(bitmap1,rotate);
+                img.setImageBitmap(bitmap1);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(60, 60);
+                params.leftMargin = x;
+                params.topMargin = y;
+                img.setLayoutParams(params);
+                img.setOnTouchListener(this);
+                break;
+            case 2:
+                Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.f2);
+                bitmap2 = RotateBitmap(bitmap2,rotate);
+                img.setImageBitmap(bitmap2);
+                FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(50, 100);
+                params2.leftMargin = x;
+                params2.topMargin = y;
+                img.setLayoutParams(params2);
+                img.setOnTouchListener(this);
+                break;
+            case 3:
+                Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),R.drawable.f3);
+                bitmap3 = RotateBitmap(bitmap3,rotate);
+                img.setImageBitmap(bitmap3);
+                FrameLayout.LayoutParams params3 = new FrameLayout.LayoutParams(60, 120);
+                params3.leftMargin = x;
+                params3.topMargin = y;
+                img.setLayoutParams(params3);
+                img.setOnTouchListener(this);
+                break;
+            case 4:
+                Bitmap bitmap4 = BitmapFactory.decodeResource(getResources(),R.drawable.angle_f);
+                bitmap4 = RotateBitmap(bitmap4,rotate);
+                img.setImageBitmap(bitmap4);
+                FrameLayout.LayoutParams params4 = new FrameLayout.LayoutParams(60, 60);
+                params4.leftMargin = x;
+                params4.topMargin = y;
+                img.setLayoutParams(params4);
+                img.setOnTouchListener(this);
+                break;
+        }
+        img.setTag(id);
+        return img;
+    }
 
     @Override
     public void onClick(View v) {
-
+        if (v.getId() == R.id.scheme_edit){
+            modeEdit = true;
+            mEdit.setEnabled(false);
+            mDone.setEnabled(true);
+        }
+        if (v.getId() == R.id.scheme_done) {
+            modeEdit = false;
+            mEdit.setEnabled(true);
+            mDone.setEnabled(false);
+        }
     }
 
     public static Bitmap RotateBitmap(Bitmap source, float angle) {
@@ -244,7 +311,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
                     if (record.getControl() != null) {
                         mDataManager.setDeviceControl(record.getControl());
                     }
-                    ((MainActivity) getActivity()).viewFragment(new ControlFragment(), "CONTROL");
+                    ((MainActivity2) getActivity()).viewFragment(new Control2Fragment(), "CONTROL");
                 }
             }
             return true;
