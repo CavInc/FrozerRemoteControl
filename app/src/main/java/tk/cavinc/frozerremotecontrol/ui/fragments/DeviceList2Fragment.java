@@ -49,6 +49,7 @@ public class DeviceList2Fragment extends Fragment implements View.OnClickListene
         mListView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         rootView.findViewById(R.id.get_scheme).setOnClickListener(this);
+        rootView.findViewById(R.id.get_home).setOnClickListener(this);
 
         return rootView;
     }
@@ -96,6 +97,9 @@ public class DeviceList2Fragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         if (v.getId() == R.id.get_scheme) {
             ((MainActivity2) getActivity()).viewFragment(new DeviceList2SchemeFragment(),"DEVICESHEME");
+        }
+        if (v.getId() == R.id.get_home) {
+            ((MainActivity2) getActivity()).viewFragment(new Start2Fragment(),"START");
         }
     }
 }

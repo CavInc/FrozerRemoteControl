@@ -71,6 +71,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
         rootView.findViewById(R.id.get_scheme).setOnClickListener(this);
         rootView.findViewById(R.id.get_home).setOnClickListener(this);
 
+        mDone.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.checkbox_multiple_marked_outline_gray));
         return rootView;
     }
 
@@ -144,11 +145,15 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
             modeEdit = true;
             mEdit.setEnabled(false);
             mDone.setEnabled(true);
+            mEdit.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.hand_left_gray));
+            mDone.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.checkbox_multiple_marked_outline));
         }
         if (v.getId() == R.id.scheme_done) {
             modeEdit = false;
             mEdit.setEnabled(true);
             mDone.setEnabled(false);
+            mDone.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.checkbox_multiple_marked_outline_gray));
+            mEdit.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.hand_left));
         }
         if (v.getId() == R.id.get_scheme) {
             ((MainActivity2) getActivity()).viewFragment(new DeviceList2Fragment(),"DEVICELIST");
