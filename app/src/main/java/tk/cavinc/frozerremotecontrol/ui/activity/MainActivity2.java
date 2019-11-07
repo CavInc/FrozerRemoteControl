@@ -26,6 +26,7 @@ import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.ui.fragments.Control2Fragment;
+import tk.cavinc.frozerremotecontrol.ui.fragments.NoWifiFragment;
 import tk.cavinc.frozerremotecontrol.ui.fragments.Start2Fragment;
 
 /**
@@ -84,6 +85,10 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!mDataManager.isWIFIOnline()) {
+            viewFragment(new NoWifiFragment(),"NOWIFI");
+        }
 
         checkPermissions();
     }

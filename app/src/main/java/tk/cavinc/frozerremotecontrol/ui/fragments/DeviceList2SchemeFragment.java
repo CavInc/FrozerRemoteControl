@@ -69,6 +69,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
         mDone.setOnClickListener(this);
 
         rootView.findViewById(R.id.get_scheme).setOnClickListener(this);
+        rootView.findViewById(R.id.get_home).setOnClickListener(this);
 
         return rootView;
     }
@@ -151,6 +152,9 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
         }
         if (v.getId() == R.id.get_scheme) {
             ((MainActivity2) getActivity()).viewFragment(new DeviceList2Fragment(),"DEVICELIST");
+        }
+        if (v.getId() == R.id.get_home) {
+            ((MainActivity2) getActivity()).viewFragment(new Start2Fragment(),"START");
         }
     }
 
