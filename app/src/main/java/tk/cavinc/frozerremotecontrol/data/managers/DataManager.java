@@ -38,6 +38,7 @@ public class DataManager {
     private ArrayList<DeviceModel> mDeviceModels;
     private DeviceModel mCurrentDevice;
     private DeviceControlModel mDeviceControl;
+    private boolean mDeviceIcon;
 
     public static DataManager getInstance() {
         if (INSTANCE==null){
@@ -248,5 +249,13 @@ public class DataManager {
             }
 
         }
+    }
+
+    public void setDeviceIcon(boolean deviceIcon) {
+        mDeviceIcon = deviceIcon;
+    }
+
+    public boolean isDeviceIcon() {
+        return mDeviceIcon;
     }
 }

@@ -98,7 +98,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
                 Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.f1);
                 bitmap1 = RotateBitmap(bitmap1,rotate);
                 img.setImageBitmap(bitmap1);
-                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(70, 70);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(80, 90);
                 params.leftMargin = x;
                 params.topMargin = y;
                 img.setLayoutParams(params);
@@ -108,7 +108,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
                 Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.f2);
                 bitmap2 = RotateBitmap(bitmap2,rotate);
                 img.setImageBitmap(bitmap2);
-                FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(50, 100);
+                FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(60, 120);
                 params2.leftMargin = x;
                 params2.topMargin = y;
                 img.setLayoutParams(params2);
@@ -118,7 +118,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
                 Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),R.drawable.f3);
                 bitmap3 = RotateBitmap(bitmap3,rotate);
                 img.setImageBitmap(bitmap3);
-                FrameLayout.LayoutParams params3 = new FrameLayout.LayoutParams(60, 120);
+                FrameLayout.LayoutParams params3 = new FrameLayout.LayoutParams(70, 140);
                 params3.leftMargin = x;
                 params3.topMargin = y;
                 img.setLayoutParams(params3);

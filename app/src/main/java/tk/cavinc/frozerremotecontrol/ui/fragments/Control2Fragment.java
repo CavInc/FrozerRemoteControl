@@ -114,7 +114,11 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
         }
 
         mDeviceName.setText(currentModel.getDeviceName());
-
+        if (mDataManager.isDeviceIcon()) {
+            nameVisible = true;
+            changeVisibleAddDevice(nameVisible);
+            mDataManager.setDeviceIcon(false);
+        }
     }
 
     @Override
@@ -250,6 +254,7 @@ public class Control2Fragment extends Fragment implements View.OnClickListener {
 
     // устанавливаем иконку приложения
     private void setIcon(){
+        mDataManager.setDeviceIcon(true);
         ((MainActivity2) getActivity()).viewFragment(new SelectDeviceIconFragment(),"SELECTICON");
     }
 

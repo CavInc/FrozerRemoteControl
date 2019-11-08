@@ -1,11 +1,15 @@
 package tk.cavinc.frozerremotecontrol.ui.adapters;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -28,12 +32,14 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
     private List<DeviceModel> data;
 
     private DeviceItemsListener mDeviceItemsListener;
+    private Context mContext;
 
     public DevicesListAdapter(List<DeviceModel> data){
         this.data = data;
     }
 
-    public DevicesListAdapter(List<DeviceModel> data,DeviceItemsListener listener){
+    public DevicesListAdapter(Context context,List<DeviceModel> data,DeviceItemsListener listener){
+        mContext = context;
         this.data = data;
         mDeviceItemsListener = listener;
     }
@@ -50,6 +56,24 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
         DeviceModel record = data.get(position);
         holder.mDeviceName.setText(record.getId()+". "+record.getDeviceName());
         holder.mDeviceId.setText(record.getDeviceID());
+        if (record.getGraphId() != 0) {
+            Bitmap bitmap = null;
+            switch (record.getGraphId()) {
+                case 1:
+                    bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.f1);
+                    break;
+                case 2:
+                    bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.f2);
+                    break;
+                case 3:
+                    bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.f3);
+                    break;
+                case 4:
+                    bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.angle_f);
+                    break;
+            }
+            holder.mDeviceIcon.setImageBitmap(bitmap);
+        }
     }
 
     @Override
@@ -73,6 +97,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener,ItemTouchHelperViewHolder {
         private TextView mDeviceName;
         private TextView mDeviceId;
+        private ImageView mDeviceIcon;
 
         DeviceItemsListener mItemsListener;
 
@@ -80,6 +105,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
             super(itemView);
             mDeviceName = itemView.findViewById(R.id.device_item_name);
             mDeviceId = itemView.findViewById(R.id.device_item_id);
+            mDeviceIcon = itemView.findViewById(R.id.device_item_img);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
             mItemsListener = listener;

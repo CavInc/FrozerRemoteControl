@@ -63,7 +63,7 @@ public class DeviceList2Fragment extends Fragment implements View.OnClickListene
     private void updateUI(){
         ArrayList<DeviceModel> data = mDataManager.getDeviceModels();
         if (mAdapter == null){
-            mAdapter = new DevicesListAdapter(data,mDeviceItemsListener);
+            mAdapter = new DevicesListAdapter(getContext(),data,mDeviceItemsListener);
             mListView.setAdapter(mAdapter);
 
             ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
