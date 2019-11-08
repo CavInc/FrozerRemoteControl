@@ -9,14 +9,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import tk.cavinc.frozerremotecontrol.R;
+import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
+import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 
 /**
  * Created by cav on 07.11.19.
  */
 
 public class NoWifiFragment extends Fragment implements View.OnClickListener {
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
