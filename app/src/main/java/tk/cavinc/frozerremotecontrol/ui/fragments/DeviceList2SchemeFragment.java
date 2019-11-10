@@ -98,7 +98,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
                 Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.f1);
                 bitmap1 = RotateBitmap(bitmap1,rotate);
                 img.setImageBitmap(bitmap1);
-                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(80, 90);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(100, 110);
                 params.leftMargin = x;
                 params.topMargin = y;
                 img.setLayoutParams(params);
@@ -109,6 +109,11 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
                 bitmap2 = RotateBitmap(bitmap2,rotate);
                 img.setImageBitmap(bitmap2);
                 FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(60, 120);
+                if (rotate == 90 || rotate == 270) {
+
+                } else {
+
+                }
                 params2.leftMargin = x;
                 params2.topMargin = y;
                 img.setLayoutParams(params2);
@@ -119,6 +124,11 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
                 bitmap3 = RotateBitmap(bitmap3,rotate);
                 img.setImageBitmap(bitmap3);
                 FrameLayout.LayoutParams params3 = new FrameLayout.LayoutParams(70, 140);
+                if (rotate == 90 || rotate == 270) {
+
+                } else {
+
+                }
                 params3.leftMargin = x;
                 params3.topMargin = y;
                 img.setLayoutParams(params3);
@@ -128,7 +138,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
                 Bitmap bitmap4 = BitmapFactory.decodeResource(getResources(),R.drawable.angle_f);
                 bitmap4 = RotateBitmap(bitmap4,rotate);
                 img.setImageBitmap(bitmap4);
-                FrameLayout.LayoutParams params4 = new FrameLayout.LayoutParams(60, 60);
+                FrameLayout.LayoutParams params4 = new FrameLayout.LayoutParams(70, 70);
                 params4.leftMargin = x;
                 params4.topMargin = y;
                 img.setLayoutParams(params4);
@@ -426,7 +436,7 @@ public class DeviceList2SchemeFragment extends Fragment implements View.OnClickL
         return rec;
     }
 
-    private static final int DELTA_SIZE = 15;
+    private static final int DELTA_SIZE = 5;
 
     private boolean testDelta(int d1,int d2){
         int delta = abs(d1-d2);

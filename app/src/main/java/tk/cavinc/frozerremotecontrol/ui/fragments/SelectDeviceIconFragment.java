@@ -26,6 +26,7 @@ public class SelectDeviceIconFragment extends Fragment implements View.OnClickLi
     private ImageView mFr2;
     private ImageView mFr3;
     private ImageView mFr4;
+    private boolean result_mode = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,12 +57,16 @@ public class SelectDeviceIconFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.setting_icon_ok) {
+            result_mode = true;
             ((MainActivity2) getActivity()).viewFragment(new Control2Fragment(),"CONTROL");
             return;
         }
         if (view.getId() == R.id.setting_icon_cancel) {
+            result_mode = false;
+            getActivity().onBackPressed();
             return;
         }
+
         iconId = -1;
         mFr1.setBackgroundColor(getActivity().getResources().getColor(R.color.app_wihte));
         mFr2.setBackgroundColor(getActivity().getResources().getColor(R.color.app_wihte));
@@ -90,8 +95,10 @@ public class SelectDeviceIconFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onDetach() {
-        DeviceModel model = mDataManager.getCurrentDevice();
-        model.setGraphId(iconId);
+        if (result_mode) {
+            DeviceModel model = mDataManager.getCurrentDevice();
+            model.setGraphId(iconId);
+        }
         super.onDetach();
     }
 }
