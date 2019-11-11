@@ -258,4 +258,26 @@ public class DataManager {
     public boolean isDeviceIcon() {
         return mDeviceIcon;
     }
+
+    // возвращаем ID устройства по строке соеденения
+    public int getDeviceInID(String id) {
+        int res = -1;
+        for (DeviceModel item:mDeviceModels) {
+            if (item.getDeviceID().equals(id)) {
+                return item.getId();
+            }
+        }
+        return res;
+    }
+
+    // возвращаем объект устройства по строке соедееннения
+    public DeviceModel getDeviceModel(String id){
+        DeviceModel res = null;
+        for (DeviceModel item:mDeviceModels) {
+            if (item.getDeviceID().equals(id)) {
+                return item;
+            }
+        }
+        return res;
+    }
 }

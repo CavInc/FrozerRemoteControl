@@ -74,7 +74,12 @@ public class ScannedQRCodeFragment extends Fragment {
                 // лочим ввод
                 releaceCamera();
                 //mIdDevice.setText(res);
-                mDataManager.setCurrentDevice(new DeviceModel(-1,res,"Новое"));
+                DeviceModel item = mDataManager.getDeviceModel(res);
+                if (item == null) {
+                    mDataManager.setCurrentDevice(new DeviceModel(-1, res, "Новое"));
+                } else {
+                    mDataManager.setCurrentDevice(item);
+                }
                 ((MainActivity2) getActivity()).viewFragment(new Control2Fragment(),"CONTROL");
             }
         }

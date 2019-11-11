@@ -48,7 +48,12 @@ public class Start2Fragment extends Fragment implements View.OnClickListener{
         }
         if (view.getId() == R.id.button_id) {
             if (mDeviceID.getText().length() != 0){
-                mDataManager.setCurrentDevice(new DeviceModel(-1,mDeviceID.getText().toString(),"Новое"));
+                DeviceModel item = mDataManager.getDeviceModel(mDeviceID.getText().toString());
+                if ( item == null) {
+                    mDataManager.setCurrentDevice(new DeviceModel(-1, mDeviceID.getText().toString(), "Новое"));
+                } else {
+                    mDataManager.setCurrentDevice(item);
+                }
                 ((MainActivity2) getActivity()).viewFragment(new Control2Fragment(),"CONTROL");
             } else {
                 ((MainActivity2) getActivity()).viewFragment(new DeviceList2Fragment(),"DEVICELIST");
