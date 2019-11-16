@@ -114,6 +114,10 @@ public class MainActivity2 extends AppCompatActivity {
             viewFragment(new Control2Fragment(),"CONTROL");
             return;
         }
+        if (f.getTag().equals("WIFISETTING")) {
+            viewFragment(new Control2Fragment(),"CONTROL");
+            return;
+        }
         if (!f.getTag().equals("START")){
             viewFragment(new Start2Fragment(),"START");
             return;
