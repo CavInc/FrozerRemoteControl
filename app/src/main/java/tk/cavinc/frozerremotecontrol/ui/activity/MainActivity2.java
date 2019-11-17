@@ -1,8 +1,14 @@
 package tk.cavinc.frozerremotecontrol.ui.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -13,14 +19,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
@@ -36,6 +45,7 @@ import tk.cavinc.frozerremotecontrol.ui.fragments.Start2Fragment;
 public class MainActivity2 extends AppCompatActivity {
     private static final int REQUEST_CAMERA_CODE = 543;
     private static final int REQUEST_STORAGE = 545;
+    private static final String TAG = "MA2";
     private DataManager mDataManager;
 
     @Override
@@ -88,9 +98,52 @@ public class MainActivity2 extends AppCompatActivity {
 
         if (!mDataManager.isWIFIOnline()) {
             viewFragment(new NoWifiFragment(),"NOWIFI");
+        } else {
+            // WIFI включено получаем данные о подключении если есть
+            testWIFI();
         }
 
         checkPermissions();
+    }
+
+    private void testWIFI() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            Log.d(TAG,"VERSION < 24");
+        }
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager.isWifiEnabled()) {
+            Log.d(TAG,"WIFI ENABLED");
+            WifiInfo info = wifiManager.getConnectionInfo();
+            Log.d(TAG,info.getSSID());
+            Log.d(TAG,info.getBSSID());
+            Log.d(TAG, String.valueOf(info.getNetworkId()));
+            if (info.getSupplicantState() == SupplicantState.COMPLETED) {
+                Log.d(TAG,"YES SUPPLICANT COMPLETE");
+                Log.d(TAG,info.getSSID());
+            }
+            List<WifiConfiguration> config = wifiManager.getConfiguredNetworks();
+            for (WifiConfiguration l:config) {
+                Log.d(TAG,l.SSID);
+                if (l.BSSID != null) {
+                    Log.d(TAG, l.BSSID);
+                }
+                Log.d(TAG, String.valueOf(l.networkId));
+                if (l.preSharedKey != null) {
+                    Log.d(TAG, l.preSharedKey);
+                }
+                BitSet alg = l.allowedAuthAlgorithms;
+                Log.d(TAG, String.valueOf(alg));
+                Log.d(TAG, String.valueOf(l.allowedGroupCiphers));
+                Log.d(TAG, String.valueOf(l.allowedKeyManagement));
+                Log.d(TAG, String.valueOf(l.allowedProtocols));
+                for (String x:l.wepKeys) {
+                    if (x != null) {
+                        Log.d(TAG, x);
+                    }
+                }
+            }
+            mDataManager.reconectWIFI("","");
+        }
     }
 
     @Override

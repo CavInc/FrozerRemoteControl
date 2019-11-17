@@ -4,7 +4,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.os.Environment;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,11 +25,14 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
 import tk.cavinc.frozerremotecontrol.BuildConfig;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceControlModel;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.utils.App;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by cav on 16.07.19.
@@ -279,5 +286,55 @@ public class DataManager {
             }
         }
         return res;
+    }
+
+    //http://qaru.site/questions/32161/how-do-i-connect-to-a-specific-wi-fi-network-in-android-programmatically
+    //https://code-examples.net/ru/q/1466823
+    // реконект к wifi сети
+    public void reconectWIFI(String ssid,String pass){
+        WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        if (!wifiManager.isWifiEnabled()) {
+            wifiManager.setWifiEnabled(true);
+        }
+
+        int network = -1; // номер сети
+
+        // проверяем если в списке уже есть то делаем рекконект
+        List<WifiConfiguration> config = wifiManager.getConfiguredNetworks();
+        for (WifiConfiguration l:config) {
+            Log.d(TAG,l.SSID);
+            if (l.BSSID != null) {
+                Log.d(TAG, l.BSSID);
+            }
+            if (l.SSID.toUpperCase().equals(ssid.toUpperCase())) {
+                network = l.networkId;
+                break;
+            }
+        }
+
+        if (network != -1) {
+            // нашли и просто реконектимся
+            wifiManager.disconnect();
+            wifiManager.enableNetwork(network,true);
+        }
+
+        // проверили всю сеть
+        if (wifiManager.startScan()) {
+            List<ScanResult> scanResult = wifiManager.getScanResults();
+            for (ScanResult l:scanResult){
+                System.out.println(l.SSID);
+                System.out.println(l.BSSID);
+                System.out.println(l.capabilities);
+            }
+        }
+
+        /*
+        List<ScanResult> scanResult = wifiManager.getScanResults();
+        for (ScanResult l:scanResult){
+            System.out.println(l.SSID);
+            System.out.println(l.BSSID);
+            System.out.println(l.capabilities);
+        }
+        */
     }
 }
