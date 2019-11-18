@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -37,11 +38,13 @@ public class NoWifiFragment extends Fragment implements View.OnClickListener {
     private EditText mPass;
 
     private DataManager mDataManager;
+    private WifiManager wifiManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDataManager = DataManager.getInstance();
+        wifiManager = (WifiManager) mDataManager.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
     @Nullable
@@ -89,7 +92,6 @@ public class NoWifiFragment extends Fragment implements View.OnClickListener {
     }
 
     private void enableWiFi() {
-        WifiManager wifiManager = (WifiManager) mDataManager.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (!wifiManager.isWifiEnabled()) {
             wifiManager.setWifiEnabled(true);
         }
@@ -124,7 +126,6 @@ public class NoWifiFragment extends Fragment implements View.OnClickListener {
     };
 
     private void reconnectWIFI(String ssid){
-        WifiManager wifiManager = (WifiManager) mDataManager.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         int network = -1; // номер сети
 
         // проверяем если в списке уже есть то делаем рекконект
@@ -148,7 +149,36 @@ public class NoWifiFragment extends Fragment implements View.OnClickListener {
             // нашли и просто реконектимся
             wifiManager.disconnect();
             wifiManager.enableNetwork(network,true);
+            wifiManager.reconnect();
             return;
         }
+
+        // начинаем проверять сеть
+        IntentFilter filter = new IntentFilter(
+                WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+
+        getActivity().registerReceiver(this.scanReceiver,filter);
+
+        wifiManager.startScan();
     }
+
+    BroadcastReceiver scanReceiver = new BroadcastReceiver(){
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG,"СЛОВИЛИ ОКОНЧАНИЕ");
+            String ssid = mSSID.getText().toString();
+
+            List<ScanResult> results = wifiManager.getScanResults();
+            for (ScanResult l : results) {
+                System.out.println(l.SSID);
+                System.out.println(l.BSSID);
+                System.out.println(l.capabilities);
+                if (l.SSID.replace("\n","").toUpperCase().equals(ssid)){
+                    // [WPA2-PSK-CCMP][WPS][ESS]
+                }
+            }
+            //getActivity().unregisterReceiver(scanReceiver);
+        }
+    };
 }
