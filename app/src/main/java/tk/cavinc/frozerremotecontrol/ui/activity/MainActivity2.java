@@ -46,6 +46,7 @@ public class MainActivity2 extends AppCompatActivity {
     private static final int REQUEST_CAMERA_CODE = 543;
     private static final int REQUEST_STORAGE = 545;
     private static final String TAG = "MA2";
+    private static final int REQUEST_LOCATION = 546;
     private DataManager mDataManager;
 
     @Override
@@ -100,7 +101,7 @@ public class MainActivity2 extends AppCompatActivity {
             viewFragment(new NoWifiFragment(),"NOWIFI");
         } else {
             // WIFI включено получаем данные о подключении если есть
-            testWIFI();
+            //testWIFI();
         }
 
         checkPermissions();
@@ -187,6 +188,9 @@ public class MainActivity2 extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_STORAGE);
         }
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_LOCATION);
+        }
     }
 
     @Override
@@ -196,6 +200,8 @@ public class MainActivity2 extends AppCompatActivity {
                 break;
             case REQUEST_STORAGE:
                 System.out.println(grantResults);
+                break;
+            case REQUEST_LOCATION:
                 break;
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

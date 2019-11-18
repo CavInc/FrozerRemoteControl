@@ -258,6 +258,10 @@ public class DataManager {
         }
     }
 
+    public Context getContext() {
+        return mContext;
+    }
+
     public void setDeviceIcon(boolean deviceIcon) {
         mDeviceIcon = deviceIcon;
     }
@@ -290,11 +294,13 @@ public class DataManager {
 
     //http://qaru.site/questions/32161/how-do-i-connect-to-a-specific-wi-fi-network-in-android-programmatically
     //https://code-examples.net/ru/q/1466823
+
     // реконект к wifi сети
     public void reconectWIFI(String ssid,String pass){
         WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         if (!wifiManager.isWifiEnabled()) {
             wifiManager.setWifiEnabled(true);
+            return;
         }
 
         int network = -1; // номер сети
@@ -303,21 +309,26 @@ public class DataManager {
         List<WifiConfiguration> config = wifiManager.getConfiguredNetworks();
         for (WifiConfiguration l:config) {
             Log.d(TAG,l.SSID);
+            Log.d(TAG, String.valueOf(l.networkId));
             if (l.BSSID != null) {
                 Log.d(TAG, l.BSSID);
             }
-            if (l.SSID.toUpperCase().equals(ssid.toUpperCase())) {
+            Log.d(TAG,l.SSID.toUpperCase()+" "+ssid.toUpperCase());
+            if (l.SSID.replace("\"","").toUpperCase().equals(ssid.toUpperCase())) {
                 network = l.networkId;
                 break;
             }
         }
 
+
+        Log.d(TAG,"NEWTWORK_ID "+network);
+
         if (network != -1) {
             // нашли и просто реконектимся
             wifiManager.disconnect();
             wifiManager.enableNetwork(network,true);
+            return;
         }
-
         // проверили всю сеть
         if (wifiManager.startScan()) {
             List<ScanResult> scanResult = wifiManager.getScanResults();
@@ -325,8 +336,16 @@ public class DataManager {
                 System.out.println(l.SSID);
                 System.out.println(l.BSSID);
                 System.out.println(l.capabilities);
+                if (l.SSID.replace("\n","").toUpperCase().equals(ssid.toUpperCase())) {
+                    // нашли значение.
+                    break;
+                }
             }
         }
+
+        // добавляем сеть и конектимся
+        WifiConfiguration configuration = new WifiConfiguration();
+        configuration.SSID = "\""+ssid+"\"";
 
         /*
         List<ScanResult> scanResult = wifiManager.getScanResults();
