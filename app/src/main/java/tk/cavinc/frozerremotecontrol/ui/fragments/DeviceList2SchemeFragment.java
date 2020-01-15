@@ -23,7 +23,6 @@ import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.CorrectCoordinate;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
-import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity2;
 
 import static android.content.ContentValues.TAG;

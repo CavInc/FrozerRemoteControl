@@ -25,7 +25,6 @@ import tk.cavinc.frozerremotecontrol.data.models.DeviceControlModel;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
 import tk.cavinc.frozerremotecontrol.data.models.RequestReturnModel;
 import tk.cavinc.frozerremotecontrol.data.network.Request;
-import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity2;
 import tk.cavinc.frozerremotecontrol.utils.ParseData;
 

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import tk.cavinc.frozerremotecontrol.R;
 import tk.cavinc.frozerremotecontrol.data.managers.DataManager;
 import tk.cavinc.frozerremotecontrol.data.models.DeviceModel;
-import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity;
 import tk.cavinc.frozerremotecontrol.ui.activity.MainActivity2;
 import tk.cavinc.frozerremotecontrol.ui.adapters.DevicesListAdapter;
 import tk.cavinc.frozerremotecontrol.ui.helper.DeviceItemsListener;
